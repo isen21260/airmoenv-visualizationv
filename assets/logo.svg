@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="496" height="150" viewBox="0 0 496 150">
+  <g id="logo" transform="translate(1 -0.073)">
+    <g id="Rectangle_1344" data-name="Rectangle 1344" transform="translate(-1 0.073)" fill="#fff" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="496" height="150" stroke="none"/>
+      <rect x="0.5" y="0.5" width="495" height="149" fill="none"/>
+    </g>
+    <g id="info" transform="translate(9 5)">
+      <text id="Ministry_of_Environment" data-name="Ministry of Environment" transform="translate(166 116.073)" font-size="30" font-family="MicrosoftSansSerif, Microsoft Sans Serif"><tspan x="0" y="0">Ministry of Environment</tspan></text>
+      <text id="環境部" transform="translate(166 74.073)" fill="#040000" font-size="70" font-family="TW-MOE-Li"><tspan x="0" y="0">環境部</tspan></text>
+    </g>
+    <g id="Logo-2" data-name="Logo" transform="translate(5)">
+      <path id="Path_1805" data-name="Path 1805" d="M75.008,74.923,5.859,103.862A75.459,75.459,0,0,1,.077,78.245Q0,76.585,0,74.923a75,75,0,0,1,150,0,80.618,80.618,0,0,1-2.06,16.956Z" fill="#2878b9"/>
+      <path id="Path_1806" data-name="Path 1806" d="M86.678,64.532l26.692,34.7,34.6-7.322a75.569,75.569,0,0,1-73.3,58.635c-32.842,0-62.455-22-71.834-53.348l60.794,1.68Z" transform="translate(0 -0.468)" fill="#9ec317"/>
+      <path id="Path_1807" data-name="Path 1807" d="M.074,79.025l25.62-.127Q40.56,56.632,55.4,34.353c1.711-1.8,3.036-2.02,4.578-1.48l7.8,8.293L36.838,84.478l-36.55-.1Z" transform="translate(0 -0.154)" fill="#fff"/>
+      <path id="Path_1808" data-name="Path 1808" d="M1.973,93.833H51.436l36.793-54.8,37.947,54.8h20.818l-1.107,2.974H121.7L88.244,48.348,54.495,97.564l-51.6-.371Z" transform="translate(0 -0.198)" fill="#9ec317"/>
+      <path id="Path_1809" data-name="Path 1809" d="M3.6,99.541l-.768-2.348,51.537-.246L88.337,48.21l33.579,48.645h24.8l-2.106,5.687H110.569L86.983,69.125,66.258,101.8l-61.906.024Z" transform="translate(0 -0.234)" fill="#fff"/>
+      <path id="Path_1810" data-name="Path 1810" d="M1.971,93.833,1.465,91.12l-.32-3.1,38.7.175L84.264,21.359a4.3,4.3,0,0,1,3.845-1.372,5.536,5.536,0,0,1,3.567,1.989L137.8,88.809h11.009l-1.185,5.024-21.387-.076L87.969,39.671,51.7,94.126Z" fill="#fff"/>
+    </g>
+  </g>
+</svg>

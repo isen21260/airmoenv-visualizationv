@@ -1,0 +1,103 @@
+{
+    "mobileSources": {
+        "shorePower": {
+            "coverageRate": 0.202,
+            "highVoltage": {
+                "active": 13,
+                "underConstruction": 5
+            },
+            "usage114": {
+                "vessels": 263,
+                "increaseFrom113": 130
+            }
+        }
+    },
+    "construction": {
+        "pollutionFee114": {
+            "totalRevenue": 2693583716,
+            "monitoredSites": 130426,
+            "pm10EmissionsTons": 34079.98,
+            "inspections": 143756
+        },
+        "machineryLabels": {
+            "totalValid": 8103,
+            "gold": {
+                "count": 7004,
+                "percentage": 86.4
+            },
+            "silver": {
+                "count": 725,
+                "percentage": 8.9
+            },
+            "bronze": {
+                "count": 374,
+                "percentage": 4.6
+            }
+        }
+    },
+    "naturalEnvironment": {
+        "riverDust114": {
+            "zhuoshui": {
+                "potentialAreaHa": 6553,
+                "improvedAreaHa": 2402,
+                "eventDays": 11,
+                "avgConcentration": 36.9
+            },
+            "gaoping": {
+                "potentialAreaHa": 7008,
+                "improvedAreaHa": 1567,
+                "eventDays": 3,
+                "avgConcentration": 35.5
+            },
+            "beinan": {
+                "potentialAreaHa": 393,
+                "improvedAreaHa": 700,
+                "eventDays": 5,
+                "avgConcentration": 18.8
+            }
+        },
+        "purificationZones": {
+            "totalBases": 1300,
+            "totalAreaHa": 1223.56,
+            "pollutionReductionTons": {
+                "pm10": 11.11,
+                "pm25": 0.93,
+                "nox": 6.26,
+                "sox": 1.96
+            }
+        }
+    },
+    "civilLife": {
+        "ecoRituals": {
+            "centralizedBurningTons114": 39600,
+            "totalBurningTons111to114": 122633,
+            "reductionTons114": 3928,
+            "donations114": {
+                "nonConvenienceStore": 101120000,
+                "convenienceStore": 3760000
+            },
+            "furnaceSubsidies": {
+                "counties": 9,
+                "facilities": 16,
+                "capacityTons": 11000
+            }
+        },
+        "catering114": {
+            "registered": 149428,
+            "monitored": 8547,
+            "inspected": 7599,
+            "compliant": 7183,
+            "nonMonitoredGuided": 4548,
+            "nonMonitoredImproved": 2956
+        },
+        "vocs": {
+            "managedCompanies": 2408,
+            "managedCategories": [
+                "A",
+                "B",
+                "C1"
+            ],
+            "plannedCategoriesBy116": 8
+        }
+    }
+}
