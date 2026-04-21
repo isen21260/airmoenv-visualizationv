@@ -1741,7 +1741,7 @@ function fug2RenderChoropleth(choropleth, tabKey, selectedCity) {
     }
 
     const configs = {
-        purification:    { data: choropleth.purification,    key: 'pm10',  label: 'PM10 減排（噸）', colors: ['#d1fae5', '#059669'], unit: '噸',  title: '空品淨化區 PM10 減排貢獻' },
+        purification:    { data: choropleth.purification,    key: 'pm10',  label: 'PM10 削減（噸）', colors: ['#d1fae5', '#059669'], unit: '噸',  title: '空品淨化區 PM10 削減貢獻' },
         construction:    { data: choropleth.construction,    key: 'sites', label: '列管工地數',       colors: ['#e0f2fe', '#0369a1'], unit: '處',  title: '營建工程列管工地數' },
         fugitiveManaged: { data: choropleth.fugitiveManaged, key: 'count', label: '固定源納管家數',   colors: ['#ccfbf1', '#0f766e'], unit: '家',  title: '固定污染源逸散納管數' }
     };
@@ -1808,7 +1808,7 @@ function fug2RenderTop5(choropleth, tabKey, selectedCity) {
     }
 
     const configs = {
-        purification:    { data: choropleth.purification,    key: 'pm10',  label: 'PM10 減排（噸）', color1: '#34d399', color2: '#059669', unit: '噸' },
+        purification:    { data: choropleth.purification,    key: 'pm10',  label: 'PM10 削減（噸）', color1: '#34d399', color2: '#059669', unit: '噸' },
         construction:    { data: choropleth.construction,    key: 'sites', label: '列管工地數',       color1: '#7dd3fc', color2: '#0369a1', unit: '處' },
         fugitiveManaged: { data: choropleth.fugitiveManaged, key: 'count', label: '固定源納管數',     color1: '#5eead4', color2: '#0f766e', unit: '家' }
     };
@@ -1903,14 +1903,13 @@ function fug2BuildRiverCards(rivers) {
             </div>
           </div>
           <div class="mb-2 flex justify-between text-sm text-slate-500 font-medium">
-            <span>揚塵潛勢改善面積</span>
-            <span class="${a.text} font-bold text-base">${pct}%</span>
+            <span>揚塵施作面積</span>
           </div>
           <div class="h-4 bg-slate-100 rounded-full overflow-hidden mb-2">
             <div class="h-full ${a.bg} rounded-full transition-all duration-1000 fug2-river-bar" style="width:0%" data-pct="${pct}"></div>
           </div>
           <div class="flex justify-between text-sm text-slate-400">
-            <span>已改善 ${r.improvedHa.toLocaleString()} ha</span>
+            <span>已施作 ${r.improvedHa.toLocaleString()} ha</span>
             <span>潛勢 ${r.potentialHa.toLocaleString()} ha</span>
           </div>
         </div>`;
