@@ -8,31 +8,18 @@
     <title>空保網儀表板 - 環境部空氣品質改善維護資訊網</title>
     <meta name="description" content="環境部空氣品質改善績效儀表板，提供即時空氣品質監控與歷年改善成果視覺化數據。">
     <!-- Fonts & Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/fa/fa.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Outfit:wght@400;600;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@400;600;800&display=swap"
         rel="stylesheet">
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: { light: '#ccfbf1', DEFAULT: '#0f766e', dark: '#0b5345', },
-                        eco: { DEFAULT: '#10b981', dark: '#047857', }
-                    },
-                    fontFamily: {
-                        sans: ['Noto Sans TC', 'sans-serif'],
-                        number: ['Outfit', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Custom project styles first, then Tailwind (so utilities win specificity ties) -->
+    <link rel="stylesheet" href="style.css?v=2">
+    <!-- Tailwind CSS (local build — see tailwind.config.js) -->
+    <link rel="stylesheet" href="tailwind.css">
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://unpkg.com/tippy.js@6"></script>
-    <link rel="stylesheet" href="style.css?v=2">
 </head>
 
 <body>
@@ -444,7 +431,7 @@
                                         class="fa-solid fa-chart-column text-sky-500 mr-2"></i>歷年推動績效趨勢</h4>
                                 <p class="text-sm text-slate-500 mb-4">依年度及主類別堆疊呈現新增核定數量</p>
                                 <div class="w-full relative" style="height: 550px;">
-                                    <canvas id="chart-airzone-trend"></canvas>
+                                    <div id="chart-airzone-trend" class="w-full h-full"></div>
                                 </div>
                             </div>
                         </div>
@@ -457,7 +444,7 @@
                                         class="fa-solid fa-ranking-star text-sky-500 mr-2"></i>各縣市空維區核定數量</h4>
                                 <p class="text-sm text-slate-500 mb-4">展現各地方政府推動空維區的努力成果</p>
                                 <div class="w-full relative" style="height: 500px;">
-                                    <canvas id="chart-airzone-leaderboard"></canvas>
+                                    <div id="chart-airzone-leaderboard" class="w-full h-full"></div>
                                 </div>
                             </div>
 
@@ -467,7 +454,7 @@
                                         class="fa-solid fa-chart-pie text-sky-500 mr-2"></i>空維區保護類型分佈</h4>
                                 <p class="text-sm text-slate-500 mb-4">了解空維區都在保護哪些地方</p>
                                 <div class="w-full relative" style="height: 500px;">
-                                    <canvas id="chart-airzone-donut"></canvas>
+                                    <div id="chart-airzone-donut" class="w-full h-full"></div>
                                 </div>
                             </div>
                         </div>
@@ -1133,7 +1120,7 @@
                             <div class="flex justify-center mb-6">
                                 <div
                                     class="bg-slate-100 border-2 border-slate-300 text-slate-700 px-6 py-2.5 rounded-xl font-bold text-sm">
-                                    <i class="fa-solid fa-waveform-lines text-slate-500 mr-2"></i>AI 系統分析音量是否超過管制標準
+                                    <i class="fa-solid fa-wave-square text-slate-500 mr-2"></i>AI 系統分析音量是否超過管制標準
                                 </div>
                             </div>
 
@@ -1821,7 +1808,6 @@
     <button id="scroll-top" aria-label="返回頂端"><i class="fa-solid fa-arrow-up"></i></button>
 
     <!-- Chart.js & ECharts -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
     <!-- Custom Script -->
     <script src="mobile_data.js?v=2"></script>

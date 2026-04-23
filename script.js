@@ -261,7 +261,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
 
+    // Guards: each tab's dashboard should only do its heavy init() once per page load.
+    // Subsequent clicks just reveal the already-built DOM & charts (ECharts handles resize).
     let mobileDashboardInitialized = false;
+    let noiseDashboardInitialized = false;
+    let fugitiveDashboardInitialized = false;
+    let fixedDashboardInitialized = false;
+    let promoDashboardInitialized = false;
 
     tabBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -294,13 +300,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 requestAnimationFrame(() => { initMobileDashboard(); });
             }
 
-            if (targetId === 'noise-source') {
+            if (targetId === 'noise-source' && !noiseDashboardInitialized) {
+                noiseDashboardInitialized = true;
                 requestAnimationFrame(() => { initNoiseDashboard(); });
             }
 
             if (targetId === 'fugitive-source') {
                 requestAnimationFrame(() => {
-                    initFugitiveDashboard();
+                    if (!fugitiveDashboardInitialized) {
+                        fugitiveDashboardInitialized = true;
+                        initFugitiveDashboard();
+                    }
                     // Re-measure all fugitive charts in case window was resized while this tab was hidden
                     ['chart-fug2-choropleth', 'chart-fug2-top5', 'chart-fug2-shore-map',
                      'chart-fug2-donut', 'chart-fug2-stacked', 'chart-fug2-catering'].forEach(id => {
@@ -311,11 +321,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
 
-            if (targetId === 'fixed-source') {
+            if (targetId === 'fixed-source' && !fixedDashboardInitialized) {
+                fixedDashboardInitialized = true;
                 requestAnimationFrame(() => { initFixedDashboard(); });
             }
 
-            if (targetId === 'promo-source') {
+            if (targetId === 'promo-source' && !promoDashboardInitialized) {
+                promoDashboardInitialized = true;
                 requestAnimationFrame(() => { initPromoDashboard(); });
             }
         });
@@ -515,25 +527,16 @@ document.addEventListener('DOMContentLoaded', () => {
             cityFilter.appendChild(opt);
         });
 
-        // Chart.js shared options
-        const commonOptions = {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { position: 'bottom', labels: { font: { family: "'Noto Sans TC', sans-serif", size: 12 }, padding: 15 } },
-                tooltip: {
-                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
-                    titleFont: { family: "'Noto Sans TC', sans-serif" },
-                    bodyFont: { family: "'Noto Sans TC', sans-serif" },
-                    cornerRadius: 10,
-                    padding: 12,
-                }
-            },
-            scales: {
-                x: { grid: { display: false }, ticks: { font: { family: "'Noto Sans TC', sans-serif" } } },
-                y: { grid: { color: '#f1f5f9' }, ticks: { font: { family: "'Noto Sans TC', sans-serif" } }, beginAtZero: true }
-            }
+        // Shared ECharts tooltip style
+        const ecTooltipBase = {
+            backgroundColor: 'rgba(15, 23, 42, 0.9)',
+            borderColor: 'rgba(56, 189, 248, 0.4)',
+            borderWidth: 1,
+            textStyle: { color: '#f8fafc', fontFamily: 'Noto Sans TC' },
+            padding: 12,
+            extraCssText: 'border-radius:10px;'
         };
+        const ecAxisFont = { fontFamily: 'Noto Sans TC', color: '#475569' };
 
         // Chart instances
         let trendChart, leaderboardChart, donutChart, echartsMap;
@@ -634,163 +637,180 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
 
-        // ---- B. Trend Chart (Stacked Bar) ----
+        // ---- B. Trend Chart (Stacked Bar, ECharts) ----
         const initTrendChart = () => {
-            const ctx = document.getElementById('chart-airzone-trend');
-            if (!ctx) return;
-
-            trendChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: YEARS.map(y => `${y}年`),
-                    datasets: CATEGORIES.map(cat => ({
-                        label: cat,
-                        data: new Array(YEARS.length).fill(0),
-                        backgroundColor: CATEGORY_COLORS[cat].bg,
-                        borderColor: CATEGORY_COLORS[cat].border,
-                        borderWidth: 1,
-                        borderRadius: 4,
-                    }))
-                },
-                options: {
-                    ...commonOptions,
-                    plugins: {
-                        ...commonOptions.plugins,
-                        title: { display: true, text: '各年度新增核定空維區數量（依主類別堆疊）', font: { size: 14, family: "'Noto Sans TC', sans-serif", weight: 'bold' }, padding: { bottom: 15 } },
-                        tooltip: {
-                            ...commonOptions.plugins.tooltip,
-                            callbacks: {
-                                label: (ctx) => `${ctx.dataset.label}：${ctx.parsed.y} 處`
-                            }
-                        }
-                    },
-                    scales: {
-                        ...commonOptions.scales,
-                        x: { ...commonOptions.scales.x, stacked: true },
-                        y: { ...commonOptions.scales.y, stacked: true, title: { display: true, text: '核定數量 (處)', font: { family: "'Noto Sans TC', sans-serif" } } }
-                    }
-                }
-            });
+            const el = document.getElementById('chart-airzone-trend');
+            if (!el) return;
+            trendChart = echarts.init(el);
         };
 
         const updateTrendChart = (data) => {
             if (!trendChart) return;
             const yearlyCat = getYearlyCategoryData(data);
-            CATEGORIES.forEach((cat, idx) => {
-                trendChart.data.datasets[idx].data = YEARS.map(y => yearlyCat[y][cat]);
-            });
-            trendChart.update();
+            const series = CATEGORIES.map(cat => ({
+                name: cat,
+                type: 'bar',
+                stack: 'total',
+                emphasis: { focus: 'series' },
+                itemStyle: {
+                    color: CATEGORY_COLORS[cat].bg,
+                    borderColor: CATEGORY_COLORS[cat].border,
+                    borderWidth: 1,
+                    borderRadius: [4, 4, 0, 0]
+                },
+                data: YEARS.map(y => yearlyCat[y][cat])
+            }));
+            trendChart.setOption({
+                title: {
+                    text: '各年度新增核定空維區數量（依主類別堆疊）',
+                    left: 'center', top: 6,
+                    textStyle: { fontFamily: 'Noto Sans TC', fontSize: 14, fontWeight: 'bold', color: '#334155' }
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { type: 'shadow' },
+                    ...ecTooltipBase,
+                    formatter: (params) => {
+                        const header = `<div style="font-weight:700;margin-bottom:4px">${params[0].axisValue}</div>`;
+                        const rows = params.filter(p => p.value > 0).map(p =>
+                            `<div>${p.marker}${p.seriesName}：<b>${p.value}</b> 處</div>`).join('');
+                        return header + rows;
+                    }
+                },
+                legend: {
+                    bottom: 0,
+                    textStyle: { fontFamily: 'Noto Sans TC', fontSize: 12, color: '#475569' },
+                    itemWidth: 14, itemHeight: 10
+                },
+                grid: { left: 60, right: 20, top: 50, bottom: 70, containLabel: true },
+                xAxis: {
+                    type: 'category',
+                    data: YEARS.map(y => `${y}年`),
+                    axisLine: { lineStyle: { color: '#cbd5e1' } },
+                    axisTick: { show: false },
+                    axisLabel: ecAxisFont
+                },
+                yAxis: {
+                    type: 'value',
+                    name: '核定數量 (處)',
+                    nameTextStyle: { fontFamily: 'Noto Sans TC', color: '#64748b' },
+                    splitLine: { lineStyle: { color: '#f1f5f9' } },
+                    axisLabel: ecAxisFont
+                },
+                series
+            }, true);
         };
 
-        // ---- C. Leaderboard Chart (Horizontal Bar) ----
+        // ---- C. Leaderboard Chart (Horizontal Bar, ECharts) ----
         const initLeaderboardChart = () => {
-            const ctx = document.getElementById('chart-airzone-leaderboard');
-            if (!ctx) return;
-
-            leaderboardChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: [],
-                    datasets: [{
-                        label: '核定數量',
-                        data: [],
-                        backgroundColor: [],
-                        borderColor: [],
-                        borderWidth: 1,
-                        borderRadius: 6,
-                    }]
-                },
-                options: {
-                    ...commonOptions,
-                    indexAxis: 'y',
-                    plugins: {
-                        ...commonOptions.plugins,
-                        title: { display: true, text: '各縣市空維區核定數量排行', font: { size: 14, family: "'Noto Sans TC', sans-serif", weight: 'bold' }, padding: { bottom: 15 } },
-                        legend: { display: false },
-                        tooltip: {
-                            ...commonOptions.plugins.tooltip,
-                            callbacks: {
-                                label: (ctx) => `共核定 ${ctx.parsed.x} 處空維區`
-                            }
-                        }
-                    },
-                    scales: {
-                        x: { ...commonOptions.scales.x, beginAtZero: true, title: { display: true, text: '核定數量 (處)', font: { family: "'Noto Sans TC', sans-serif" } } },
-                        y: { ...commonOptions.scales.y, grid: { display: false }, ticks: { font: { family: "'Noto Sans TC', sans-serif", size: 12, weight: 'bold' } } }
-                    }
-                }
-            });
+            const el = document.getElementById('chart-airzone-leaderboard');
+            if (!el) return;
+            leaderboardChart = echarts.init(el);
         };
 
         const updateLeaderboardChart = (data) => {
             if (!leaderboardChart) return;
             const cityTotals = getCityTotals(data);
-            const gradient = (i, total) => {
-                const ratio = 1 - (i / total);
+            const labels = cityTotals.map(([c]) => c);
+            const values = cityTotals.map(([, v]) => v);
+            const n = cityTotals.length || 1;
+            const colors = cityTotals.map((_, i) => {
+                const ratio = 1 - (i / n);
                 return `rgba(2, 132, 199, ${0.3 + ratio * 0.6})`;
-            };
-
-            leaderboardChart.data.labels = cityTotals.map(([c]) => c);
-            leaderboardChart.data.datasets[0].data = cityTotals.map(([, v]) => v);
-            leaderboardChart.data.datasets[0].backgroundColor = cityTotals.map((_, i) => gradient(i, cityTotals.length));
-            leaderboardChart.data.datasets[0].borderColor = cityTotals.map(() => '#0284c7');
-            leaderboardChart.update();
+            });
+            leaderboardChart.setOption({
+                title: {
+                    text: '各縣市空維區核定數量排行',
+                    left: 'center', top: 6,
+                    textStyle: { fontFamily: 'Noto Sans TC', fontSize: 14, fontWeight: 'bold', color: '#334155' }
+                },
+                tooltip: {
+                    trigger: 'item',
+                    ...ecTooltipBase,
+                    formatter: (p) => `<b>${p.name}</b><br/>共核定 <b>${p.value}</b> 處空維區`
+                },
+                grid: { left: 10, right: 30, top: 50, bottom: 40, containLabel: true },
+                xAxis: {
+                    type: 'value',
+                    name: '核定數量 (處)',
+                    nameTextStyle: { fontFamily: 'Noto Sans TC', color: '#64748b' },
+                    splitLine: { lineStyle: { color: '#f1f5f9' } },
+                    axisLabel: ecAxisFont
+                },
+                yAxis: {
+                    type: 'category',
+                    data: [...labels].reverse(),
+                    axisLine: { show: false },
+                    axisTick: { show: false },
+                    axisLabel: { ...ecAxisFont, fontSize: 12, fontWeight: 'bold', color: '#334155' }
+                },
+                series: [{
+                    type: 'bar',
+                    data: [...values].reverse().map((v, i) => ({
+                        value: v,
+                        itemStyle: {
+                            color: [...colors].reverse()[i],
+                            borderColor: '#0284c7',
+                            borderWidth: 1,
+                            borderRadius: [0, 6, 6, 0]
+                        }
+                    })),
+                    barMaxWidth: 22
+                }]
+            }, true);
         };
 
-        // ---- D. Donut Chart ----
+        // ---- D. Donut Chart (ECharts) ----
         const initDonutChart = () => {
-            const ctx = document.getElementById('chart-airzone-donut');
-            if (!ctx) return;
-
-            donutChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: [],
-                    datasets: [{
-                        data: [],
-                        backgroundColor: [],
-                        borderColor: '#fff',
-                        borderWidth: 3,
-                        hoverOffset: 15,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '55%',
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: { font: { family: "'Noto Sans TC', sans-serif", size: 13 }, padding: 20, usePointStyle: true, pointStyleWidth: 12 }
-                        },
-                        title: { display: true, text: '空維區保護類型佔比分析', font: { size: 14, family: "'Noto Sans TC', sans-serif", weight: 'bold' }, padding: { bottom: 15 } },
-                        tooltip: {
-                            backgroundColor: 'rgba(15, 23, 42, 0.9)',
-                            titleFont: { family: "'Noto Sans TC', sans-serif" },
-                            bodyFont: { family: "'Noto Sans TC', sans-serif" },
-                            cornerRadius: 10,
-                            padding: 12,
-                            callbacks: {
-                                label: (ctx) => {
-                                    const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
-                                    const pct = ((ctx.parsed / total) * 100).toFixed(1);
-                                    return ` ${ctx.label}：${ctx.parsed} 處 (${pct}%)`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
+            const el = document.getElementById('chart-airzone-donut');
+            if (!el) return;
+            donutChart = echarts.init(el);
         };
 
         const updateDonutChart = (data) => {
             if (!donutChart) return;
             const catTotals = getCategoryTotals(data);
             const labels = Object.keys(catTotals).sort((a, b) => catTotals[b] - catTotals[a]);
-            donutChart.data.labels = labels;
-            donutChart.data.datasets[0].data = labels.map(l => catTotals[l]);
-            donutChart.data.datasets[0].backgroundColor = labels.map(l => CATEGORY_COLORS[l]?.bg || 'rgba(148,163,184,0.8)');
-            donutChart.update();
+            const items = labels.map(l => ({
+                name: l,
+                value: catTotals[l],
+                itemStyle: { color: CATEGORY_COLORS[l]?.bg || 'rgba(148,163,184,0.8)' }
+            }));
+            const total = items.reduce((s, d) => s + d.value, 0) || 1;
+            donutChart.setOption({
+                title: {
+                    text: '空維區保護類型佔比分析',
+                    left: 'center', top: 6,
+                    textStyle: { fontFamily: 'Noto Sans TC', fontSize: 14, fontWeight: 'bold', color: '#334155' }
+                },
+                tooltip: {
+                    trigger: 'item',
+                    ...ecTooltipBase,
+                    formatter: (p) => {
+                        const pct = ((p.value / total) * 100).toFixed(1);
+                        return ` ${p.name}：<b>${p.value}</b> 處 (${pct}%)`;
+                    }
+                },
+                legend: {
+                    bottom: 0,
+                    textStyle: { fontFamily: 'Noto Sans TC', fontSize: 13, color: '#475569' },
+                    icon: 'circle', itemWidth: 12, itemHeight: 12, itemGap: 18
+                },
+                series: [{
+                    name: '保護類型',
+                    type: 'pie',
+                    radius: ['45%', '70%'],
+                    center: ['50%', '50%'],
+                    avoidLabelOverlap: true,
+                    itemStyle: { borderColor: '#fff', borderWidth: 3 },
+                    label: { show: false },
+                    emphasis: {
+                        scale: true, scaleSize: 8,
+                        label: { show: false }
+                    },
+                    data: items
+                }]
+            }, true);
         };
 
         // ---- E. KPI Updates ----
@@ -842,7 +862,12 @@ document.addEventListener('DOMContentLoaded', () => {
         cityFilter.addEventListener('change', updateAllCharts);
 
         // Handle map resize (uses shared debounced dispatcher)
-        _resizeHandlers.add(() => { if (echartsMap) echartsMap.resize(); });
+        _resizeHandlers.add(() => {
+            if (echartsMap) _safeResize(echartsMap);
+            if (trendChart) _safeResize(trendChart);
+            if (leaderboardChart) _safeResize(leaderboardChart);
+            if (donutChart) _safeResize(donutChart);
+        });
     };
 
     initAirZoneDashboard();
