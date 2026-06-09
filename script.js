@@ -228,7 +228,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainNavUl = document.querySelector('#main-nav ul');
     if (menuToggle && mainNavUl) {
         menuToggle.addEventListener('click', () => {
-            mainNavUl.classList.toggle('show');
+            const isOpen = mainNavUl.classList.toggle('show');
+            menuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         });
     }
 
@@ -275,11 +276,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 b.classList.remove('active', 'text-white', 'shadow-md', 'transform', '-translate-y-1');
                 b.classList.add('bg-white/80', 'text-slate-500', 'hover:bg-slate-50', 'hover:text-brand');
                 b.style.backgroundColor = '';
+                if (b.hasAttribute('role')) b.setAttribute('aria-selected', 'false');
             });
             tabContents.forEach(c => c.classList.remove('active'));
 
             btn.classList.add('active', 'text-white', 'shadow-md', 'transform', '-translate-y-1');
             btn.classList.remove('bg-white/80', 'text-slate-500', 'hover:bg-slate-50', 'hover:text-brand');
+            if (btn.hasAttribute('role')) btn.setAttribute('aria-selected', 'true');
 
             const targetId = btn.getAttribute('data-tab');
             const _tabEl = document.getElementById(targetId);
@@ -1253,8 +1256,11 @@ document.addEventListener('DOMContentLoaded', () => {
 // ==========================================
 // 噪音振動管理 Dashboard - Redesigned
 // ==========================================
-// 資料來源：統計至115年1月底，固定式168套、移動式175套，直接開罰23,127件、通知到檢22,661件
-// 修正：桃園市、臺中市、臺南市等縣市原始資料中 mobile 與 direct_fine 欄位對調，已還原正確值
+// 資料來源：統計至115年1月底。下列各縣市明細為已修正版本（桃園市、臺中市、臺南市等
+// 縣市原始資料中 mobile 與 direct_fine 欄位曾對調，已還原正確值）。
+// 全國加總（由本表計算，亦為頁面 KPI 顯示值）：
+//   固定式 168 套、移動式 170 套（合計 338 套）、直接開罰 23,132 件、通知到檢 22,661 件。
+// ⚠ 若日後調整下表數值，請同步更新 index.html 的 KPI（kpi-total-eq / kpi-direct-fine 等）。
 const noiseRawData = [
     { id: 'A', county: "臺北市",  fixed: 20,  mobile: 14,  direct_fine: 6540,  notify_inspect: 8308  },
     { id: 'F', county: "新北市",  fixed: 35,  mobile: 11,  direct_fine: 5808,  notify_inspect: 4362  },
@@ -1304,7 +1310,7 @@ function initNoiseDashboard() {
                 center: ['50%', '50%'],
                 data: [
                     { value: 168, name: '固定式', itemStyle: { color: '#67e8f9' } },
-                    { value: 175, name: '移動式', itemStyle: { color: '#e879f9' } }
+                    { value: 170, name: '移動式', itemStyle: { color: '#e879f9' } }
                 ],
                 label: { show: false },
                 emphasis: { scale: false }
@@ -1766,7 +1772,7 @@ function fug2RenderChoropleth(choropleth, tabKey, selectedCity) {
     }
 
     const configs = {
-        purification:    { data: choropleth.purification,    key: 'pm10',  label: 'PM10 削減（噸）', colors: ['#d1fae5', '#059669'], unit: '噸',  title: '空品淨化區 PM10 削減貢獻' },
+        purification:    { data: choropleth.purification,    key: 'pm10',  label: 'PM₁₀ 削減（噸）', colors: ['#d1fae5', '#059669'], unit: '噸',  title: '空品淨化區 PM₁₀ 削減貢獻' },
         construction:    { data: choropleth.construction,    key: 'sites', label: '列管工地數',       colors: ['#e0f2fe', '#0369a1'], unit: '處',  title: '營建工程列管工地數' },
         fugitiveManaged: { data: choropleth.fugitiveManaged, key: 'count', label: '固定源納管家數',   colors: ['#ccfbf1', '#0f766e'], unit: '家',  title: '固定污染源逸散納管數' }
     };
@@ -1833,7 +1839,7 @@ function fug2RenderTop5(choropleth, tabKey, selectedCity) {
     }
 
     const configs = {
-        purification:    { data: choropleth.purification,    key: 'pm10',  label: 'PM10 削減（噸）', color1: '#34d399', color2: '#059669', unit: '噸' },
+        purification:    { data: choropleth.purification,    key: 'pm10',  label: 'PM₁₀ 削減（噸）', color1: '#34d399', color2: '#059669', unit: '噸' },
         construction:    { data: choropleth.construction,    key: 'sites', label: '列管工地數',       color1: '#7dd3fc', color2: '#0369a1', unit: '處' },
         fugitiveManaged: { data: choropleth.fugitiveManaged, key: 'count', label: '固定源納管數',     color1: '#5eead4', color2: '#0f766e', unit: '家' }
     };
@@ -1918,7 +1924,7 @@ function fug2BuildRiverCards(rivers) {
         return `<div class="bg-white/80 backdrop-blur-md rounded-3xl p-6 border border-white/80 shadow-lg">
           <div class="flex justify-between items-center mb-4">
             <h4 class="font-black text-slate-800 text-xl">${r.name}</h4>
-            <span class="text-sm px-3 py-1 rounded-full ${a.light} ${a.text} font-semibold">PM10 ${r.avgConc} μg/m³</span>
+            <span class="text-sm px-3 py-1 rounded-full ${a.light} ${a.text} font-semibold">PM<sub>10</sub> ${r.avgConc} μg/m³</span>
           </div>
           <div class="flex items-end gap-4 mb-5 p-4 rounded-2xl ${bg} border ${bc}">
             <span class="text-7xl font-black ${tc} leading-none font-number">${r.eventDays114}</span>
@@ -1968,10 +1974,9 @@ function fug2RenderStackedBar(data) {
             { type: 'value', name: '集中燒（公噸）', nameLocation: 'middle', nameGap: 52, nameTextStyle: { fontSize: 12, color: '#f59e0b' }, axisLabel: { fontSize: 12, color: '#f59e0b' }, splitLine: { show: false } }
         ],
         series: [
-            { name: '非超商代金', type: 'bar', stack: 'alt', yAxisIndex: 0, data: data.map(d => d.donationNonStore), itemStyle: { color: new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#2dd4bf'},{offset:1,color:'#0891b2'}]) } },
-            { name: '以米代金',   type: 'bar', stack: 'alt', yAxisIndex: 0, data: data.map(d => d.riceDonation),   itemStyle: { color: new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#34d399'},{offset:1,color:'#059669'}]) } },
-            { name: '以物代金',   type: 'bar', stack: 'alt', yAxisIndex: 0, data: data.map(d => d.itemDonation),   itemStyle: { color: new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#a7f3d0'},{offset:1,color:'#34d399'}]) } },
-            { name: '代金純減量', type: 'bar', stack: 'alt', yAxisIndex: 0, data: data.map(d => d.pureReduction), itemStyle: { color: new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#86efac'},{offset:1,color:'#16a34a'}]) } },
+            { name: '紙錢減少用量', type: 'bar', yAxisIndex: 0, barWidth: '45%',
+              data: data.map(d => (d.donationNonStore || 0) + (d.riceDonation || 0) + (d.itemDonation || 0) + (d.pureReduction || 0)),
+              itemStyle: { borderRadius: [6,6,0,0], color: new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#2dd4bf'},{offset:1,color:'#0891b2'}]) } },
             { name: '集中燒', type: 'line', yAxisIndex: 1, data: data.map(d => d.centralizedBurning),
               smooth: true, lineStyle: { color: '#f59e0b', width: 2.5, type: 'dashed' },
               itemStyle: { color: '#f59e0b' }, symbol: 'circle', symbolSize: 8 }
@@ -2230,7 +2235,7 @@ function fixedRenderTrendChart(pollutant) {
             backgroundColor:'rgba(15,23,42,0.92)', borderColor:'#0ea5e9', borderWidth:1,
             textStyle:{ color:'#f8fafc', fontSize:12 },
             formatter: params => {
-                let s = `<b style="font-size:13px">${params[0].axisValue} 年</b><br/>`;
+                let s = `<b style="font-size:13px">${params[0].axisValue}年</b><br/>`;
                 params.forEach(p => { s += `${p.marker}${p.seriesName}：<b>${Math.round(p.value).toLocaleString('zh-TW')} 噸</b><br/>`; });
                 return s;
             },
@@ -2238,9 +2243,10 @@ function fixedRenderTrendChart(pollutant) {
         legend: { top:4, right:0, itemWidth:12, itemHeight:8, itemGap:14, textStyle:{fontSize:12,color:'#475569'} },
         grid:  { top:40, right:16, bottom:36, left:72, containLabel:false },
         xAxis: {
-            type:'category', data:years, boundaryGap:false,
+            // Categories are 民國 (ROC) years; series data stays index-aligned via the same `years` order.
+            type:'category', data: years.map(y => y - 1911), boundaryGap:false,
             axisLine:{lineStyle:{color:'#e2e8f0'}}, axisTick:{show:false},
-            axisLabel:{color:'#94a3b8',fontSize:11}, splitLine:{show:false},
+            axisLabel:{color:'#94a3b8',fontSize:11, formatter: v => v + '年'}, splitLine:{show:false},
         },
         yAxis: {
             type:'value',
@@ -2314,8 +2320,12 @@ function fixedRenderTreemap(year) {
     if (!el || !FIXED_MOCK_DATA[year]) return;
     if (!_fixedTreemapChart) _fixedTreemapChart = echarts.init(el);
 
-    const raw = (FIXED_MOCK_DATA[year].countyData || [])
-        .filter(c => c.name !== '未知縣市')
+    const allCounty = FIXED_MOCK_DATA[year].countyData || [];
+    // Unattributed emissions: kept (not hidden) so the treemap reconciles with the headline total,
+    // but shown as a neutral block so it doesn't distort the county-to-county comparison.
+    const unclassified = allCounty.find(c => c.name === '其他（未分類）');
+    const raw = allCounty
+        .filter(c => c.name !== '其他（未分類）')
         .sort((a,b) => b.value - a.value)
         .slice(0, 8);
 
@@ -2331,6 +2341,13 @@ function fixedRenderTreemap(year) {
             : _fixedLerpColor('#0891b2','#0c4a6e', (t-0.5) * 2);
         return { name:c.name, value:Math.round(c.value), itemStyle:{color} };
     });
+    if (unclassified && unclassified.value > 0) {
+        data.push({
+            name: '其他（未分類）',
+            value: Math.round(unclassified.value),
+            itemStyle: { color: '#94a3b8' }   // neutral slate — signals "not a county"
+        });
+    }
 
     _fixedTreemapChart.setOption({
         backgroundColor:'transparent',
@@ -2428,8 +2445,8 @@ function fixedPopulateYearSelector() {
     sel.innerHTML = '';
     [...FIXED_YEARS].reverse().forEach(yr => {
         const opt = document.createElement('option');
-        opt.value = yr;
-        opt.textContent = yr;
+        opt.value = yr;                       // keep ROC→AD value for data lookup
+        opt.textContent = (yr - 1911) + '年'; // display in 民國 (ROC) to match other tabs
         if (yr === FIXED_DEFAULT_YEAR) opt.selected = true;
         sel.appendChild(opt);
     });
@@ -2646,7 +2663,7 @@ function promoRenderCategoryChart(cityKey) {
             textStyle: { color: '#f8fafc', fontFamily: 'Noto Sans TC', fontSize: 13 },
             formatter: params => {
                 const p = params[0];
-                return `<b>${p.name}</b><br/>認證數量：<b style="color:#38bdf8">${p.value}</b> 場所`;
+                return `<b>${p.name}</b><br/>標章數量：<b style="color:#38bdf8">${p.value}</b> 場所`;
             }
         },
         grid: { top: 8, bottom: 8, left: 8, right: 48, containLabel: true },
@@ -2699,11 +2716,11 @@ function promoRenderMap() {
                 if (cityData) {
                     const pct = ((cityData.excellent / cityData.total) * 100).toFixed(1);
                     return `<b style="font-size:15px;color:#34d399">${params.name}</b><br/>
-                            認證總數：<b>${cityData.total}</b> 場所<br/>
+                            標章總數：<b>${cityData.total}</b> 場所<br/>
                             公告 <b>${cityData.public}</b>　非公告 <b>${cityData.private}</b><br/>
                             優良級佔比：<b style="color:#86efac">${pct}%</b>`;
                 }
-                return `<b>${params.name}</b><br/><span style="color:#94a3b8">暫無認證資料</span>`;
+                return `<b>${params.name}</b><br/><span style="color:#94a3b8">暫無標章資料</span>`;
             }
         },
         visualMap: {
@@ -2716,7 +2733,7 @@ function promoRenderMap() {
             itemWidth: 14, itemHeight: 80
         },
         series: [{
-            name: '室內空品認證數量',
+            name: '室內空品標章數量',
             type: 'map',
             map: echarts.getMap('TaiwanMain') ? 'TaiwanMain' : 'Taiwan',
             roam: false,
@@ -2798,4 +2815,45 @@ document.addEventListener('DOMContentLoaded', () => {
         fixedPopulateYearSelector();
         fixedUpdateKPIs(FIXED_DEFAULT_YEAR);
     });
+});
+
+// ==========================================
+// Accessibility: give ECharts/canvas chart containers a screen-reader name.
+// Canvas charts are otherwise announced as empty. role="img" + aria-label only
+// affects assistive tech — no visual or data change. Decorative-only containers
+// already convey their numbers via adjacent text.
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+    const chartLabels = {
+        'map-container': '全國空氣品質維護區縣市分布地圖',
+        'chart-airzone-trend': '空氣品質維護區歷年核定趨勢圖',
+        'chart-airzone-leaderboard': '各縣市空氣品質維護區核定數排行榜',
+        'chart-airzone-donut': '空氣品質維護區類型占比圖',
+        'chart-fixed-emission-trend': '固定污染源歷年排放量趨勢圖',
+        'chart-fixed-permit-donut': '固定污染源許可證類型占比圖',
+        'chart-fixed-treemap': '各縣市固定污染源排放量矩形樹圖',
+        'chart-mobile-2stroke': '二行程機車剩餘總數趨勢圖',
+        'chart-mobile-phases': '燃油機車各期別登記數圖',
+        'chart-mobile-diesel': '柴油車各期別登記數圖',
+        'chart-mobile-subsidy': '老舊車輛汰舊補助統計圖',
+        'kpi-donut-chart': '噪音振動設備固定與移動占比圖',
+        'noise-rank-chart': '各縣市噪音振動管理績效排行榜',
+        'chart-fug2-choropleth': '逸散污染源縣市分布地圖',
+        'chart-fug2-top5': '逸散污染源前五名縣市排行圖',
+        'chart-fug2-shore-map': '全國港口岸電設置地圖',
+        'chart-fug2-donut': '營建機具金銀銅牌占比圖',
+        'chart-fug2-stacked': '紙錢集中燃燒與減量統計圖',
+        'chart-fug2-catering': '餐飲業空氣污染防制統計圖',
+        'chart-iaq-map': '室內空氣品質標章縣市分布地圖',
+        'chart-iaq-donut-announce': '室內空氣品質場所公告類型占比圖',
+        'chart-iaq-donut-grade': '室內空氣品質標章評等占比圖',
+        'chart-iaq-category': '室內空氣品質標章場所類別分布圖'
+    };
+    for (const [id, label] of Object.entries(chartLabels)) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.setAttribute('role', 'img');
+            el.setAttribute('aria-label', label);
+        }
+    }
 });

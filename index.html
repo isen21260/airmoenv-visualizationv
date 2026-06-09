@@ -6,11 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>空保網儀表板 - 環境部空氣品質改善維護資訊網</title>
-    <meta name="description" content="環境部空氣品質改善績效儀表板，提供即時空氣品質監控與歷年改善成果視覺化數據。">
-    <!-- Fonts & Icons -->
-    <link rel="stylesheet" href="assets/fa/fa.css">
+    <meta name="description" content="環境部空氣品質改善績效儀表板，提供空氣品質監控與歷年改善成果視覺化數據。">
+    <meta name="theme-color" content="#009688">
+    <!-- Social / Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="zh_TW">
+    <meta property="og:site_name" content="環境部 空氣品質改善維護資訊網">
+    <meta property="og:title" content="空保網儀表板 - 環境部空氣品質改善維護資訊網">
+    <meta property="og:description" content="環境部空氣品質改善績效儀表板，提供空氣品質監控與歷年改善成果視覺化數據。">
+    <meta name="twitter:card" content="summary_large_image">
+    <!-- Performance: warm up third-party origins used for fonts, icons, charts & map data -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="dns-prefetch" href="https://unpkg.com">
+    <link rel="dns-prefetch" href="https://raw.githubusercontent.com">
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="assets/fa/fa.css">
     <link
         href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@400;600;800&display=swap"
         rel="stylesheet">
@@ -18,11 +30,14 @@
     <link rel="stylesheet" href="style.css?v=2">
     <!-- Tailwind CSS (local build — see tailwind.config.js) -->
     <link rel="stylesheet" href="tailwind.css">
-    <script src="https://unpkg.com/@popperjs/core@2"></script>
-    <script src="https://unpkg.com/tippy.js@6"></script>
+    <!-- Tooltip libs: deferred so they no longer block first paint (tippy() runs on DOMContentLoaded) -->
+    <script defer src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer src="https://unpkg.com/tippy.js@6"></script>
 </head>
 
 <body>
+    <!-- Skip link: visually hidden until keyboard-focused (WCAG 2.4.1 Bypass Blocks) -->
+    <a href="#main-content" class="skip-link">跳到主要內容</a>
     <!-- Static Tech-White Background Decoration -->
     <div id="dynamic-bg" aria-hidden="true">
         <!-- Tech icons -->
@@ -54,12 +69,12 @@
                     </div>
                 </div>
                 <div class="header-actions">
-                    <a href="#" class="icon-btn" title="網站導覽"><i class="fa-solid fa-sitemap"></i></a>
-                    <a href="#" class="icon-btn" title="回首頁"><i class="fa-solid fa-home"></i></a>
-                    <a href="#" class="icon-btn" title="English">EN</a>
+                    <a href="#" class="icon-btn" title="網站導覽" aria-label="網站導覽"><i class="fa-solid fa-sitemap" aria-hidden="true"></i></a>
+                    <a href="#" class="icon-btn" title="回首頁" aria-label="回首頁"><i class="fa-solid fa-home" aria-hidden="true"></i></a>
+                    <a href="#" class="icon-btn" title="English" lang="en">EN</a>
                 </div>
             </div>
-            <nav id="main-nav">
+            <nav id="main-nav" aria-label="主選單">
                 <ul>
                     <li><a href="#">首頁</a></li>
                     <li><a href="#">最新消息</a></li>
@@ -68,15 +83,15 @@
                     <li><a href="#">補助與民眾專區</a></li>
                     <li><a href="#">文件下載</a></li>
                 </ul>
-                <button id="menu-toggle" aria-label="選單">
-                    <span></span><span></span><span></span>
+                <button id="menu-toggle" aria-label="選單" aria-expanded="false" aria-controls="main-nav">
+                    <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
                 </button>
             </nav>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="relative z-10 w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 mt-10 pb-20">
+    <main id="main-content" class="relative z-10 w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 mt-10 pb-20">
 
         <nav class="breadcrumb">
             <a href="#"><i class="fa-solid fa-home mr-1"></i>首頁</a>
@@ -130,7 +145,7 @@
                         <div id="hero-aqi-ring-container"
                             class="relative w-80 h-80 flex flex-col items-center justify-center rounded-full border border-sky-200 shadow-[0_0_60px_rgba(14,165,233,0.2)] bg-white/95 transition-colors duration-1000">
                             <svg class="absolute inset-0 w-full h-full transform -rotate-90 drop-shadow-[0_0_15px_rgba(14,165,233,0.5)]"
-                                viewBox="0 0 100 100">
+                                viewBox="0 0 100 100" aria-hidden="true">
                                 <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(14,165,233,0.12)"
                                     stroke-width="2"></circle>
                                 <circle id="hero-aqi-ring" cx="50" cy="50" r="46" fill="none" stroke="#22c55e"
@@ -271,48 +286,48 @@
         <section class="mb-20">
             <!-- Stylized Tab Navigation - 6 Tabs in 2 rows of 3 -->
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-10 scroll-animate scroll-delay-1"
-                id="tab-buttons">
+                id="tab-buttons" role="tablist" aria-label="空氣品質管理面向">
                 <button
                     class="tab-btn active w-full py-4 rounded-2xl font-bold text-base flex flex-col items-center justify-center gap-1.5 transition-all border border-white/40 backdrop-blur-sm bg-sky-600 text-white shadow-md transform -translate-y-1"
-                    data-tab="airzone-source" data-theme="theme-airzone">
-                    <i class="fa-solid fa-shield-halved text-2xl mb-0.5 opacity-90"></i>
-                    <span>空維區核定</span>
-                    <span class="text-[10px] font-normal opacity-75 uppercase tracking-widest">Air Zone</span>
+                    data-tab="airzone-source" data-theme="theme-airzone"
+                    role="tab" id="tab-airzone-source" aria-controls="airzone-source" aria-selected="true">
+                    <i class="fa-solid fa-shield-halved text-2xl mb-0.5 opacity-90" aria-hidden="true"></i>
+                    <span>空維區</span>
                 </button>
                 <button
                     class="tab-btn w-full py-4 rounded-2xl font-bold text-base flex flex-col items-center justify-center gap-1.5 transition-all border border-white/40 backdrop-blur-sm bg-white/80 text-slate-500 hover:bg-slate-50 hover:text-brand"
-                    data-tab="fixed-source" data-theme="theme-fixed">
-                    <i class="fa-solid fa-industry text-2xl mb-0.5 opacity-80"></i>
-                    <span>固定源管理</span>
-                    <span class="text-[10px] font-normal opacity-60 uppercase tracking-widest">Stationary</span>
+                    data-tab="fixed-source" data-theme="theme-fixed"
+                    role="tab" id="tab-fixed-source" aria-controls="fixed-source" aria-selected="false">
+                    <i class="fa-solid fa-industry text-2xl mb-0.5 opacity-80" aria-hidden="true"></i>
+                    <span>工業排放源管理</span>
                 </button>
                 <button
                     class="tab-btn w-full py-4 rounded-2xl font-bold text-base flex flex-col items-center justify-center gap-1.5 transition-all border border-white/40 backdrop-blur-sm bg-white/80 text-slate-500 hover:bg-slate-50 hover:text-brand"
-                    data-tab="mobile-source" data-theme="theme-mobile">
-                    <i class="fa-solid fa-car-side text-2xl mb-0.5 opacity-80"></i>
-                    <span>移動源管理</span>
-                    <span class="text-[10px] font-normal opacity-60 uppercase tracking-widest">Mobile</span>
+                    data-tab="mobile-source" data-theme="theme-mobile"
+                    role="tab" id="tab-mobile-source" aria-controls="mobile-source" aria-selected="false">
+                    <i class="fa-solid fa-car-side text-2xl mb-0.5 opacity-80" aria-hidden="true"></i>
+                    <span>交通排放源管理</span>
                 </button>
                 <button
                     class="tab-btn w-full py-4 rounded-2xl font-bold text-base flex flex-col items-center justify-center gap-1.5 transition-all border border-white/40 backdrop-blur-sm bg-white/80 text-slate-500 hover:bg-slate-50 hover:text-brand"
-                    data-tab="noise-source" data-theme="theme-noise">
-                    <i class="fa-solid fa-volume-high text-2xl mb-0.5 opacity-80"></i>
-                    <span>噪音振動管理</span>
-                    <span class="text-[10px] font-normal opacity-60 uppercase tracking-widest">Noise</span>
+                    data-tab="noise-source" data-theme="theme-noise"
+                    role="tab" id="tab-noise-source" aria-controls="noise-source" aria-selected="false">
+                    <i class="fa-solid fa-volume-low text-2xl mb-0.5 opacity-80" aria-hidden="true"></i>
+                    <span>寧適環境管理</span>
                 </button>
                 <button
                     class="tab-btn w-full py-4 rounded-2xl font-bold text-base flex flex-col items-center justify-center gap-1.5 transition-all border border-white/40 backdrop-blur-sm bg-white/80 text-slate-500 hover:bg-slate-50 hover:text-brand"
-                    data-tab="fugitive-source" data-theme="theme-fugitive">
-                    <i class="fa-solid fa-wind text-2xl mb-0.5 opacity-80"></i>
-                    <span>逸散污染源</span>
-                    <span class="text-[10px] font-normal opacity-60 uppercase tracking-widest">Fugitive</span>
+                    data-tab="fugitive-source" data-theme="theme-fugitive"
+                    role="tab" id="tab-fugitive-source" aria-controls="fugitive-source" aria-selected="false">
+                    <i class="fa-solid fa-wind text-2xl mb-0.5 opacity-80" aria-hidden="true"></i>
+                    <span>社區排放源管理</span>
                 </button>
                 <button
                     class="tab-btn w-full py-4 rounded-2xl font-bold text-base flex flex-col items-center justify-center gap-1.5 transition-all border border-white/40 backdrop-blur-sm bg-white/80 text-slate-500 hover:bg-slate-50 hover:text-brand"
-                    data-tab="promo-source" data-theme="theme-promo">
-                    <i class="fa-solid fa-bullhorn text-2xl mb-0.5 opacity-80"></i>
-                    <span>空品推廣成果</span>
-                    <span class="text-[10px] font-normal opacity-60 uppercase tracking-widest">Promotion</span>
+                    data-tab="promo-source" data-theme="theme-promo"
+                    role="tab" id="tab-promo-source" aria-controls="promo-source" aria-selected="false">
+                    <i class="fa-solid fa-house text-2xl mb-0.5 opacity-80" aria-hidden="true"></i>
+                    <span>室內空品管理</span>
                 </button>
             </div>
 
@@ -320,16 +335,16 @@
             <div class="relative scroll-animate scroll-delay-2">
 
                 <!-- ====== 頁籤 1：空維區核定 ====== -->
-                <div id="airzone-source" class="tab-content active">
+                <div id="airzone-source" class="tab-content active" role="tabpanel" aria-labelledby="tab-airzone-source" tabindex="0">
                     <div class="glass-card p-8 border-t-8 border-t-sky-500">
                         <div
                             class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 border-b border-slate-200/50 pb-6">
                             <div>
                                 <h3 class="text-3xl font-black text-slate-800 tracking-tight">全國空氣品質維護區</h3>
-                                <p class="text-slate-500 mt-2 font-medium">視覺化展現各縣市推動「空氣品質維護區」績效，提升政策有感度與透明度。</p>
+                                <p class="text-slate-500 mt-2 font-medium">以直觀視覺化展現各縣市推動「空氣品質維護區」績效，提升政策有感度與透明度。</p>
                             </div>
                             <div class="mt-4 md:mt-0 flex gap-3">
-                                <select id="airzone-filter-year"
+                                <select id="airzone-filter-year" aria-label="篩選年度"
                                     class="text-sm bg-sky-50 border border-sky-200 rounded-lg px-3 py-2 cursor-pointer outline-none text-sky-700 font-bold hover:bg-sky-100 transition-colors">
                                     <option value="all">所有年度</option>
                                     <option value="109">109年</option>
@@ -339,7 +354,7 @@
                                     <option value="113">113年</option>
                                     <option value="114">114年</option>
                                 </select>
-                                <select id="airzone-filter-city"
+                                <select id="airzone-filter-city" aria-label="篩選縣市"
                                     class="text-sm bg-sky-50 border border-sky-200 rounded-lg px-3 py-2 cursor-pointer outline-none text-sky-700 font-bold hover:bg-sky-100 transition-colors">
                                     <option value="all">所有縣市</option>
                                 </select>
@@ -464,7 +479,7 @@
                 </div>
 
                 <!-- ====== 頁籤 2：固定源管理 ====== -->
-                <div id="fixed-source" class="tab-content">
+                <div id="fixed-source" class="tab-content" role="tabpanel" aria-labelledby="tab-fixed-source" tabindex="0">
                     <div class="glass-card p-8 border-t-8 border-t-cyan-500">
 
                         <!-- Section Header -->
@@ -472,11 +487,11 @@
                             class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 border-b border-slate-200/50 pb-6">
                             <div>
                                 <h3 class="text-3xl font-black text-slate-800 tracking-tight">固定污染源排放治理儀表板</h3>
-                                <p class="text-slate-500 mt-2 font-medium">2009–2024
+                                <p class="text-slate-500 mt-2 font-medium">民國98–113年
                                     工廠空污排放趨勢、稽查納管率及固定源許可申請狀態，促進政策透明。</p>
                             </div>
                             <div class="mt-4 md:mt-0 flex items-center gap-3">
-                                <label class="text-sm font-bold text-slate-500">資料年度</label>
+                                <label class="text-sm font-bold text-slate-500" for="fixed-filter-year">資料年度</label>
                                 <select id="fixed-filter-year"
                                     class="text-sm bg-cyan-50 border border-cyan-200 rounded-lg px-3 py-2 cursor-pointer outline-none text-cyan-700 font-bold hover:bg-cyan-100 transition-colors">
                                     <!-- 由 JS 動態填入 -->
@@ -526,14 +541,14 @@
                                             class="w-11 h-11 rounded-2xl bg-white/20 flex items-center justify-center text-xl backdrop-blur-sm border border-white/30 group-hover:scale-110 transition-transform">
                                             <i class="fa-solid fa-arrow-trend-down"></i>
                                         </div>
-                                        <div class="text-emerald-100 font-bold text-sm leading-tight">較 2009 年<br>累計減排幅度
+                                        <div class="text-emerald-100 font-bold text-sm leading-tight">較民國98年<br>累計減排幅度
                                         </div>
                                     </div>
                                     <div class="text-5xl font-number font-black drop-shadow-md leading-none">
                                         <span id="kpi-fixed-reduce-pct">–</span>
                                         <span class="text-2xl font-sans ml-0.5 opacity-80">%</span>
                                     </div>
-                                    <div class="text-emerald-200 text-xs mt-1 font-medium">以 2009 年為基準</div>
+                                    <div class="text-emerald-200 text-xs mt-1 font-medium">以民國98年為基準</div>
                                 </div>
                             </div>
 
@@ -597,7 +612,7 @@
                                     <div>
                                         <h4 class="font-bold text-xl text-slate-800"><i
                                                 class="fa-solid fa-chart-line text-cyan-500 mr-2"></i>主要污染物排放量趨勢</h4>
-                                        <p class="text-sm text-slate-500 mt-1">2009–2024 年 SOx、NOx、VOCs、TSP 排放量歷年變化</p>
+                                        <p class="text-sm text-slate-500 mt-1">民國98–113年 SOx、NOx、VOCs、TSP 排放量歷年變化</p>
                                     </div>
                                     <div class="flex gap-1.5 bg-slate-100 rounded-xl p-1 text-xs"
                                         id="fixed-emission-type-tabs">
@@ -628,7 +643,7 @@
                                 <div class="mb-3">
                                     <h4 class="font-bold text-xl text-slate-800"><i
                                             class="fa-solid fa-file-signature text-cyan-500 mr-2"></i>許可證審查動態</h4>
-                                    <p class="text-sm text-slate-500 mt-1">選定年度設置／變更／操作申請件數比例</p>
+                                    <p class="text-sm text-slate-500 mt-1">選定年度設置／變更／操作申請件數</p>
                                 </div>
                                 <div id="chart-fixed-permit-donut" class="flex-1 rounded-2xl"
                                     style="min-height: 340px;"></div>
@@ -666,7 +681,7 @@
                 </div>
 
                 <!-- ====== 頁籤 3：移動源管理 ====== -->
-                <div id="mobile-source" class="tab-content">
+                <div id="mobile-source" class="tab-content" role="tabpanel" aria-labelledby="tab-mobile-source" tabindex="0">
                     <div class="glass-card p-8 border-t-8 border-t-indigo-500">
                         <div class="mb-8 flex items-center justify-between">
                             <div>
@@ -827,13 +842,13 @@
                 </div>
 
                 <!-- ====== 頁籤 4：噪音振動管理 ====== -->
-                <div id="noise-source" class="tab-content">
+                <div id="noise-source" class="tab-content" role="tabpanel" aria-labelledby="tab-noise-source" tabindex="0">
                     <div class="glass-card p-8 border-t-8 border-t-purple-500">
                         <div
                             class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 border-b border-slate-200/50 pb-6">
                             <div>
                                 <h3 class="text-3xl font-black text-slate-800 tracking-tight">聲音照相科技執法儀表板</h3>
-                                <p class="text-slate-500 mt-2 font-medium">寧靜守護網 | 展示全國噪音管制執法績效與即時監測成果</p>
+                                <p class="text-slate-500 mt-2 font-medium">寧靜守護網 | 展示全國噪音管制執法績效與監測成果</p>
                             </div>
                             <div class="mt-4 md:mt-0 flex gap-3">
                                 <div
@@ -861,11 +876,11 @@
                                         <div class="text-cyan-100 font-bold text-sm">累計設備總數</div>
                                     </div>
                                     <div class="text-5xl font-number font-black drop-shadow-md">
-                                        <span id="kpi-total-eq" class="counter" data-target="343">0</span>
+                                        <span id="kpi-total-eq" class="counter" data-target="338">0</span>
                                         <span class="text-xl font-sans ml-2 opacity-80 font-medium">套</span>
                                     </div>
                                     <div class="text-xs text-cyan-100 mt-2 opacity-80">固定 <span
-                                            class="font-bold">168</span> / 移動 <span class="font-bold">175</span></div>
+                                            class="font-bold">168</span> / 移動 <span class="font-bold">170</span></div>
                                 </div>
                             </div>
 
@@ -892,7 +907,7 @@
                                             </div>
                                             <div class="flex items-center gap-1.5"><span
                                                     class="w-2.5 h-2.5 rounded-full bg-fuchsia-300 inline-block"></span>移動式
-                                                <span class="font-bold text-white">175</span> 套
+                                                <span class="font-bold text-white">170</span> 套
                                             </div>
                                             <div class="text-violet-200 pt-1 border-t border-white/20">覆蓋全國 22 縣市</div>
                                         </div>
@@ -915,7 +930,7 @@
                                         <div class="text-red-100 font-bold text-sm">直接開罰總件數</div>
                                     </div>
                                     <div class="text-5xl font-number font-black drop-shadow-md">
-                                        <span id="kpi-direct-fine" class="counter" data-target="23127">0</span>
+                                        <span id="kpi-direct-fine" class="counter" data-target="23132">0</span>
                                         <span class="text-xl font-sans ml-2 opacity-80 font-medium">件</span>
                                     </div>
                                     <div class="text-xs text-red-100 mt-2 opacity-80">依噪音管制法第26條告發</div>
@@ -960,7 +975,8 @@
                                         style="position:absolute;inset:0;opacity:0.1;pointer-events:none;background-image:linear-gradient(#94a3b8 1px,transparent 1px),linear-gradient(90deg,#94a3b8 1px,transparent 1px);background-size:20px 20px">
                                     </div>
                                     <svg viewBox="5 -10 330 430" preserveAspectRatio="xMidYMid meet"
-                                        id="noise-taiwan-svg" style="width:100%;height:100%">
+                                        id="noise-taiwan-svg" style="width:100%;height:100%"
+                                        role="img" aria-label="全國各縣市噪音振動陳情與稽查地圖">
                                         <g id="taiwan">
                                             <g id="Z" data-county-id="Z">
                                                 <path stroke-miterlimit="10"
@@ -1185,7 +1201,7 @@
                                     <div
                                         class="bg-gradient-to-br from-red-500 to-rose-600 text-white rounded-2xl p-4 text-center shadow-lg">
                                         <i class="fa-solid fa-file-invoice-dollar text-2xl mb-2 block"></i>
-                                        <div class="font-black text-xl font-number">23,127 件</div>
+                                        <div class="font-black text-xl font-number">23,132 件</div>
                                         <div class="text-xs text-red-100 mt-1">罰鍰直接寄達車主</div>
                                     </div>
                                 </div>
@@ -1246,7 +1262,7 @@
                 </div>
 
                 <!-- ====== 頁籤 5：逸散污染源 ====== -->
-                <div id="fugitive-source" class="tab-content">
+                <div id="fugitive-source" class="tab-content" role="tabpanel" aria-labelledby="tab-fugitive-source" tabindex="0">
                     <div class="glass-card p-8 border-t-8 border-t-teal-500">
 
                         <!-- Header -->
@@ -1362,7 +1378,7 @@
                                     <div class="flex gap-1.5 bg-slate-100 rounded-xl p-1" id="fug2-choropleth-tabs">
                                         <button
                                             class="fug2-tab active px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-teal-500 text-white"
-                                            data-tab="purification">空品淨化區PM10削減</button>
+                                            data-tab="purification">空品淨化區PM<sub>10</sub>削減</button>
                                         <button
                                             class="fug2-tab px-4 py-2 rounded-lg text-sm font-semibold transition-all text-slate-500 hover:bg-white"
                                             data-tab="construction">營建工程管制</button>
@@ -1445,7 +1461,7 @@
                                 <h4 class="font-bold text-xl text-slate-800 mb-2"><i
                                         class="fa-solid fa-medal text-amber-500 mr-2"></i>施工機具清潔排放自主管理標章</h4>
                                 <p class="text-sm text-slate-500 mb-2">有效標章 8,103 部・金牌占 86.4%（115年2月底）</p>
-                                <div id="chart-fug2-donut" style="width:100%;height:260px"></div>
+                                <div id="chart-fug2-donut" style="width:100%;height:340px"></div>
                                 <!-- Info Bars -->
                                 <div class="mt-2 space-y-3 px-2">
                                     <div>
@@ -1480,21 +1496,6 @@
                                             <div class="h-full rounded-full bg-gradient-to-r from-orange-300 to-amber-700 fug2-bar"
                                                 style="width:0%" data-pct="4.6"></div>
                                         </div>
-                                    </div>
-                                </div>
-                                <!-- Stats Row -->
-                                <div class="mt-4 grid grid-cols-3 gap-3 text-center">
-                                    <div class="bg-amber-50 rounded-2xl py-3 px-2">
-                                        <div class="text-2xl font-black font-number text-amber-600">8,103</div>
-                                        <div class="text-xs text-slate-500 mt-0.5">有效標章總數</div>
-                                    </div>
-                                    <div class="bg-teal-50 rounded-2xl py-3 px-2">
-                                        <div class="text-2xl font-black font-number text-teal-600">12</div>
-                                        <div class="text-xs text-slate-500 mt-0.5">管制區</div>
-                                    </div>
-                                    <div class="bg-sky-50 rounded-2xl py-3 px-2">
-                                        <div class="text-2xl font-black font-number text-sky-600">49</div>
-                                        <div class="text-xs text-slate-500 mt-0.5">環評承諾案</div>
                                     </div>
                                 </div>
                             </div>
@@ -1550,15 +1551,15 @@
                 </div>
 
                 <!-- ====== 頁籤 6：空品推廣成果 (室內空氣品質標章) ====== -->
-                <div id="promo-source" class="tab-content">
+                <div id="promo-source" class="tab-content" role="tabpanel" aria-labelledby="tab-promo-source" tabindex="0">
                     <div class="glass-card p-8 border-t-8 border-t-emerald-500">
 
                         <!-- ── 頁籤標題列 ── -->
                         <div
                             class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 border-b border-slate-200/50 pb-6">
                             <div>
-                                <h3 class="text-3xl font-black text-slate-800 tracking-tight">室內空氣品質標章認證儀表板</h3>
-                                <p class="text-slate-500 mt-2 font-medium">IAQ Eco-Tech Dashboard｜透過互動地圖探索各縣市室內空品標章認證成果
+                                <h3 class="text-3xl font-black text-slate-800 tracking-tight">室內空氣品質標章儀表板</h3>
+                                <p class="text-slate-500 mt-2 font-medium">IAQ Eco-Tech Dashboard｜透過互動地圖探索各縣市室內空品標章成果
                                 </p>
                             </div>
                             <div class="mt-4 md:mt-0 flex gap-3">
@@ -1585,7 +1586,7 @@
                                             class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-2xl backdrop-blur-sm border border-white/30 group-hover:scale-110 transition-transform">
                                             <i class="fa-solid fa-certificate"></i>
                                         </div>
-                                        <div class="text-emerald-100 font-bold text-sm">總認證場所數<br><span
+                                        <div class="text-emerald-100 font-bold text-sm">具標章場所數<br><span
                                                 class="opacity-70">全台累計</span></div>
                                     </div>
                                     <div class="text-5xl font-number font-black drop-shadow-md">
@@ -1609,8 +1610,8 @@
                                             class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-2xl backdrop-blur-sm border border-white/30 group-hover:scale-110 transition-transform">
                                             <i class="fa-solid fa-hand-holding-heart"></i>
                                         </div>
-                                        <div class="text-violet-100 font-bold text-sm">非公告自願認證<br><span
-                                                class="opacity-70">佔總認證比例</span></div>
+                                        <div class="text-violet-100 font-bold text-sm">非公告自願標章<br><span
+                                                class="opacity-70">佔總標章比例</span></div>
                                     </div>
                                     <div class="text-5xl font-number font-black drop-shadow-md">
                                         33.8<span class="text-xl font-sans ml-1 opacity-80 font-medium">%</span>
@@ -1632,7 +1633,7 @@
                                             <i class="fa-solid fa-star"></i>
                                         </div>
                                         <div class="text-amber-100 font-bold text-sm">優良級標章佔比<br><span
-                                                class="opacity-70">最高等級認證</span></div>
+                                                class="opacity-70">最高等級標章</span></div>
                                     </div>
                                     <div class="text-5xl font-number font-black drop-shadow-md">
                                         71.6<span class="text-xl font-sans ml-1 opacity-80 font-medium">%</span>
@@ -1661,7 +1662,7 @@
                                         <span class="counter" data-target="8">0</span>
                                         <span class="text-xl font-sans ml-2 opacity-80 font-medium">縣市</span>
                                     </div>
-                                    <div class="text-xs text-sky-100 mt-2 opacity-80">北中南東均有認證場所</div>
+                                    <div class="text-xs text-sky-100 mt-2 opacity-80">北中南東均有標章場所</div>
                                 </div>
                             </div>
                         </div>
@@ -1675,7 +1676,7 @@
                                 <div class="flex items-center justify-between mb-3">
                                     <div>
                                         <h4 class="font-bold text-xl text-slate-800"><i
-                                                class="fa-solid fa-map text-emerald-500 mr-2"></i>全台認證分佈熱力圖</h4>
+                                                class="fa-solid fa-map text-emerald-500 mr-2"></i>全台標章分佈熱力圖</h4>
                                         <p class="text-sm text-slate-500 mt-0.5">點擊縣市查看詳細分析</p>
                                     </div>
                                     <button id="iaq-reset-btn"
@@ -1709,7 +1710,7 @@
                                                 class="text-center px-4 py-2 bg-white rounded-2xl shadow-sm border border-emerald-100">
                                                 <div id="iaq-city-total"
                                                     class="text-2xl font-number font-black text-emerald-600">1,285</div>
-                                                <div class="text-[11px] text-slate-500 font-medium">認證總數</div>
+                                                <div class="text-[11px] text-slate-500 font-medium">標章總數</div>
                                             </div>
                                             <div id="iaq-excellence-badge"
                                                 class="text-center px-4 py-2 bg-white rounded-2xl shadow-sm border border-green-100">
@@ -1745,7 +1746,7 @@
                                     class="bg-white/80 backdrop-blur-md rounded-3xl p-5 border border-white/80 shadow-lg flex flex-col">
                                     <h4 class="font-bold text-base text-slate-800 mb-1"><i
                                             class="fa-solid fa-ranking-star text-sky-500 mr-1.5"></i>前五大場所類別</h4>
-                                    <p class="text-xs text-slate-500 mb-2">認證場所性質統計（數量最多之類別）</p>
+                                    <p class="text-xs text-slate-500 mb-2">場所性質統計（數量最多之類別）</p>
                                     <div id="chart-iaq-category" style="width: 100%; flex: 1; min-height: 220px;"></div>
                                 </div>
 

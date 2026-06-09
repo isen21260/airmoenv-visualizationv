@@ -555,3 +555,62 @@ body {
         height: 250px !important;
     }
 }
+
+/* ==========================================
+   Accessibility (WCAG 2.1 AA) — invisible to mouse users
+   ========================================== */
+
+/* Skip link: off-screen until keyboard-focused, then slides into view */
+.skip-link {
+    position: fixed;
+    top: -100px;
+    left: 16px;
+    z-index: 1000;
+    padding: 10px 18px;
+    border-radius: 0 0 10px 10px;
+    background: var(--primary-color);
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: var(--shadow-md);
+    transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+    top: 0;
+    outline: 3px solid #fff;
+    outline-offset: -3px;
+}
+
+/* Visible keyboard-focus ring (mouse clicks are unaffected by :focus-visible) */
+a:focus-visible,
+button:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible,
+.tab-btn:focus-visible {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+/* Respect users who prefer reduced motion (vestibular safety) */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    #radar-sweep-arm {
+        animation: none !important;
+    }
+
+    .scroll-animate {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
