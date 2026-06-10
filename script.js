@@ -811,7 +811,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const total = items.reduce((s, d) => s + d.value, 0) || 1;
             donutChart.setOption({
                 title: {
-                    text: '空維區保護類型佔比分析',
+                    text: '空維區保護類型占比分析',
                     left: 'center', top: 6,
                     textStyle: { fontFamily: 'Noto Sans TC', fontSize: 14, fontWeight: 'bold', color: '#334155' }
                 },
@@ -1091,7 +1091,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     legend: { show: false },
                     series: [
                         {
-                            name: '高低污染佔比',
+                            name: '高低污染占比',
                             type: 'pie',
                             radius: [0, '40%'],
                             center: ['50%', '50%'],
@@ -1100,7 +1100,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             labelLayout: { hideOverlap: true }
                         },
                         {
-                            name: '各期別佔比',
+                            name: '各期別占比',
                             type: 'pie',
                             radius: ['48%', '70%'],
                             center: ['50%', '50%'],
@@ -2765,7 +2765,7 @@ function promoRenderMap() {
                     return `<b style="font-size:15px;color:#34d399">${params.name}</b><br/>
                             標章總數：<b>${cityData.total}</b> 場所<br/>
                             公告 <b>${cityData.public}</b>　非公告 <b>${cityData.private}</b><br/>
-                            優良級佔比：<b style="color:#86efac">${pct}%</b>`;
+                            優良級占比：<b style="color:#86efac">${pct}%</b>`;
                 }
                 return `<b>${params.name}</b><br/><span style="color:#94a3b8">暫無標章資料</span>`;
             }
