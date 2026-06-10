@@ -119,9 +119,10 @@
                         </div>
                         <div class="text-emerald-600 text-5xl font-number font-black mb-1 drop-shadow-sm">
                             <i class="fa-solid fa-arrow-down text-2xl mr-1"></i><span id="counter-fixed-drop"
-                                class="counter" data-target="45">0</span><span class="text-2xl ml-1">%</span>
+                                class="counter" data-target="62">0</span><span class="text-2xl ml-1">%</span>
                         </div>
                         <div class="text-slate-700 font-bold text-sm">固定源 SOx/NOx 減排</div>
+                        <div class="text-[11px] text-slate-400 font-medium mt-0.5">基準年：民國98年</div>
                     </div>
                     <div
                         class="glass-card p-6 flex-1 flex flex-col items-center justify-center text-center group scroll-animate scroll-delay-1">
@@ -264,6 +265,7 @@
                                 class="counter" data-target="56">0</span><span class="text-2xl ml-1">天</span>
                         </div>
                         <div class="text-slate-700 font-bold text-sm">河川揚塵事件日減少</div>
+                        <div class="text-[11px] text-slate-400 font-medium mt-0.5">基準年：民國106年</div>
                     </div>
                     <div
                         class="glass-card p-6 flex-1 flex flex-col items-center justify-center text-center group scroll-animate scroll-delay-1">
@@ -272,10 +274,11 @@
                             <i class="fa-solid fa-arrow-trend-down"></i>
                         </div>
                         <div class="text-blue-600 text-5xl font-number font-black mb-1 drop-shadow-sm">
-                            <span id="counter-pm25-drop" class="counter" data-target="46">0</span><span
+                            <span id="counter-pm25-drop" class="counter" data-target="36">0</span><span
                                 class="text-2xl ml-1">%</span>
                         </div>
                         <div class="text-slate-700 font-bold text-sm">PM2.5 歷年累積降幅</div>
+                        <div class="text-[11px] text-slate-400 font-medium mt-0.5">基準年：民國105年</div>
                     </div>
                 </div>
             </div>
@@ -486,7 +489,7 @@
                             class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 border-b border-slate-200/50 pb-6">
                             <div>
                                 <h3 class="text-3xl font-black text-slate-800 tracking-tight">固定污染源排放治理儀表板</h3>
-                                <p class="text-slate-500 mt-2 font-medium">民國98–113年
+                                <p class="text-slate-500 mt-2 font-medium">民國98–114年
                                     工廠空污排放趨勢、稽查納管率及固定源許可申請狀態，促進政策透明。</p>
                             </div>
                             <div class="mt-4 md:mt-0 flex items-center gap-3">
@@ -611,7 +614,7 @@
                                     <div>
                                         <h4 class="font-bold text-xl text-slate-800"><i
                                                 class="fa-solid fa-chart-line text-cyan-500 mr-2"></i>主要污染物排放量趨勢</h4>
-                                        <p class="text-sm text-slate-500 mt-1">民國98–113年 SOx、NOx、VOCs、TSP 排放量歷年變化</p>
+                                        <p class="text-sm text-slate-500 mt-1">民國98–114年 SOx、NOx、VOCs、TSP 排放量歷年變化</p>
                                     </div>
                                     <div class="flex gap-1.5 bg-slate-100 rounded-xl p-1 text-xs"
                                         id="fixed-emission-type-tabs">
@@ -656,8 +659,11 @@
                             <div
                                 class="xl:col-span-7 card-frosted p-6">
                                 <div class="mb-3">
-                                    <h4 class="font-bold text-xl text-slate-800"><i
-                                            class="fa-solid fa-map-location-dot text-cyan-500 mr-2"></i>縣市排放總量熱區分佈</h4>
+                                    <h4 class="font-bold text-xl text-slate-800 flex items-center flex-wrap gap-2"><i
+                                            class="fa-solid fa-map-location-dot text-cyan-500 mr-2"></i>縣市排放總量熱區分佈
+                                        <span id="fixed-treemap-year"
+                                            class="text-xs font-bold text-cyan-700 bg-cyan-50 border border-cyan-200 rounded-full px-3 py-1">資料年度：114年</span>
+                                    </h4>
                                     <p class="text-sm text-slate-500 mt-1">前 10 大縣市空污排放量，方塊面積與顏色深淺均反映數值大小</p>
                                 </div>
                                 <div id="chart-fixed-treemap" class="w-full rounded-2xl" style="height: 400px;"></div>
@@ -667,8 +673,11 @@
                             <div
                                 class="xl:col-span-5 card-frosted p-6">
                                 <div class="mb-4">
-                                    <h4 class="font-bold text-xl text-slate-800"><i
-                                            class="fa-solid fa-ranking-star text-cyan-500 mr-2"></i>年度排放量</h4>
+                                    <h4 class="font-bold text-xl text-slate-800 flex items-center flex-wrap gap-2"><i
+                                            class="fa-solid fa-ranking-star text-cyan-500 mr-2"></i>年度排放量
+                                        <span id="fixed-top5-year"
+                                            class="text-xs font-bold text-cyan-700 bg-cyan-50 border border-cyan-200 rounded-full px-3 py-1">資料年度：114年</span>
+                                    </h4>
                                     <p class="text-sm text-slate-500 mt-1">選定年度排放量最高之8家工廠及年增減率</p>
                                 </div>
                                 <div id="fixed-top-emitters" class="flex flex-col gap-4"></div>

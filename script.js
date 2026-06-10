@@ -2152,7 +2152,7 @@ let FIXED_DATA        = null;
 let FIXED_MOCK_DATA   = {};
 let FIXED_YEARS       = [];
 const FIXED_BASE_YEAR    = 2009;
-const FIXED_DEFAULT_YEAR = 2024;
+const FIXED_DEFAULT_YEAR = 2025; // 民國114年（dashboard_data.json 由真實 CSV 彙整，含完整四季）
 
 // -- 1. Fetch & build data -----------------------------------
 let _fixedDataPromise = null;
@@ -2361,10 +2361,20 @@ function _fixedLerpColor(hexLow, hexHigh, t) {
     return `rgb(${Math.round(r1+(r2-r1)*t)},${Math.round(g1+(g2-g1)*t)},${Math.round(b1+(b2-b1)*t)})`;
 }
 
+// 「資料年度」徽章（縣市熱區 & 年度排放量）隨選定年度同步
+function fixedUpdateYearBadges(year) {
+    const roc = `資料年度：${year - 1911}年`;
+    ['fixed-treemap-year', 'fixed-top5-year'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = roc;
+    });
+}
+
 let _fixedTreemapChart = null;
 function fixedRenderTreemap(year) {
     const el = document.getElementById('chart-fixed-treemap');
     if (!el || !FIXED_MOCK_DATA[year]) return;
+    fixedUpdateYearBadges(year);
     if (!_fixedTreemapChart) _fixedTreemapChart = echarts.init(el);
 
     const allCounty = FIXED_MOCK_DATA[year].countyData || [];
