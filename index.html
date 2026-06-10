@@ -14,13 +14,12 @@
     <meta property="og:site_name" content="環境部 空氣品質改善維護資訊網">
     <meta property="og:title" content="空保網儀表板 - 環境部空氣品質改善維護資訊網">
     <meta property="og:description" content="環境部空氣品質改善績效儀表板，提供空氣品質監控與歷年改善成果視覺化數據。">
+    <meta property="og:url" content="https://air.moenv.gov.tw/">
+    <meta property="og:image" content="https://air.moenv.gov.tw/AirWEB_P/images/logo.png">
     <meta name="twitter:card" content="summary_large_image">
-    <!-- Performance: warm up third-party origins used for fonts, icons, charts & map data -->
+    <!-- Performance: warm up font origins (charts/tooltips/map data are now self-hosted) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-    <link rel="dns-prefetch" href="https://unpkg.com">
-    <link rel="dns-prefetch" href="https://raw.githubusercontent.com">
     <!-- Fonts & Icons -->
     <link rel="stylesheet" href="assets/fa/fa.css">
     <link
@@ -30,9 +29,9 @@
     <link rel="stylesheet" href="style.css?v=2">
     <!-- Tailwind CSS (local build — see tailwind.config.js) -->
     <link rel="stylesheet" href="tailwind.css">
-    <!-- Tooltip libs: deferred so they no longer block first paint (tippy() runs on DOMContentLoaded) -->
-    <script defer src="https://unpkg.com/@popperjs/core@2"></script>
-    <script defer src="https://unpkg.com/tippy.js@6"></script>
+    <!-- Tooltip libs: self-hosted & version-pinned, deferred so they don't block first paint -->
+    <script defer src="assets/vendor/popper-2.11.8.min.js"></script>
+    <script defer src="assets/vendor/tippy-6.3.7.umd.min.js"></script>
 </head>
 
 <body>
@@ -131,10 +130,10 @@
                             <i class="fa-solid fa-truck-moving"></i>
                         </div>
                         <div class="text-indigo-600 text-5xl font-number font-black mb-1 drop-shadow-sm">
-                            <span id="counter-mobile-drop" class="counter" data-target="30">0</span><span
-                                class="text-2xl ml-1">萬輛</span>
+                            <span id="counter-mobile-drop" class="counter" data-target="11">0</span><span
+                                class="text-2xl ml-1">萬+</span>
                         </div>
-                        <div class="text-slate-700 font-bold text-sm">淘汰老舊大型車輛</div>
+                        <div class="text-slate-700 font-bold text-sm">112-114車輛汰換媒合補助數</div>
                     </div>
                 </div>
                 <!-- AQI Ring -->
@@ -209,7 +208,7 @@
                             </div>
                         </div>
                         <!-- Floating Metric Cards (optimized: no backdrop-filter, added will-change) -->
-                        <div class="absolute -right-2 md:right-4 top-16 glass-card p-4 flex items-center gap-4 animate-[floatOrb_4s_ease-in-out_infinite] border border-sky-200 shadow-xl bg-white/95"
+                        <div class="absolute -right-2 md:right-4 top-16 glass-card p-4 flex items-center gap-4 animate-float-orb border border-sky-200 shadow-xl bg-white/95"
                             style="animation-delay: 0s; will-change: transform;">
                             <div
                                 class="w-12 h-12 rounded-full bg-cyan-100 flex items-center justify-center text-cyan-600 shadow-[inset_0_0_10px_rgba(6,182,212,0.2)]">
@@ -222,7 +221,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="absolute -left-2 md:left-4 bottom-20 glass-card p-4 flex items-center gap-4 animate-[floatOrb_5s_ease-in-out_infinite] border border-violet-200 shadow-xl bg-white/95"
+                        <div class="absolute -left-2 md:left-4 bottom-20 glass-card p-4 flex items-center gap-4 animate-float-orb-slow border border-violet-200 shadow-xl bg-white/95"
                             style="animation-delay: 1s; will-change: transform;">
                             <div
                                 class="w-12 h-12 rounded-full bg-violet-100 flex items-center justify-center text-violet-600 shadow-[inset_0_0_10px_rgba(139,92,246,0.2)]">
@@ -236,7 +235,7 @@
                             </div>
                         </div>
                         <a href="https://airtw.moenv.gov.tw/" target="_blank"
-                            class="absolute right-4 md:right-10 bottom-8 glass-card p-3 px-5 animate-[floatOrb_6s_ease-in-out_infinite] border border-sky-200 shadow-xl flex flex-col items-center bg-white/95 hover:bg-sky-50 transition-colors cursor-pointer"
+                            class="absolute right-4 md:right-10 bottom-8 glass-card p-3 px-5 animate-float-orb-slower border border-sky-200 shadow-xl flex flex-col items-center bg-white/95 hover:bg-sky-50 transition-colors cursor-pointer"
                             style="animation-delay: 2s; will-change: transform;">
                             <div
                                 class="text-slate-500 text-[10px] uppercase font-bold tracking-widest mb-1 flex items-center gap-1">
@@ -432,7 +431,7 @@
                         <div class="grid grid-cols-1 xl:grid-cols-12 gap-8 mb-8">
                             <!-- Choropleth Map (Compressed Width) -->
                             <div
-                                class="xl:col-span-5 bg-white/80 backdrop-blur-md rounded-3xl p-6 border border-white/80 shadow-lg">
+                                class="xl:col-span-5 card-frosted p-6">
                                 <h4 class="font-bold text-xl text-slate-800 mb-4"><i
                                         class="fa-solid fa-map text-sky-500 mr-2"></i>全台空維區熱點地圖</h4>
                                 <p class="text-sm text-slate-500 mb-4">各縣市核定數量越多顏色越深</p>
@@ -441,7 +440,7 @@
 
                             <!-- Time Series Chart (Expanded Width) -->
                             <div
-                                class="xl:col-span-7 bg-white/80 backdrop-blur-md rounded-3xl p-6 border border-white/80 shadow-lg">
+                                class="xl:col-span-7 card-frosted p-6">
                                 <h4 class="font-bold text-xl text-slate-800 mb-4"><i
                                         class="fa-solid fa-chart-column text-sky-500 mr-2"></i>歷年推動績效趨勢</h4>
                                 <p class="text-sm text-slate-500 mb-4">依年度及主類別堆疊呈現新增核定數量</p>
@@ -454,7 +453,7 @@
                         <!-- Bottom Grid: Leaderboard + Donut -->
                         <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
                             <!-- Leaderboard -->
-                            <div class="bg-white/80 backdrop-blur-md rounded-3xl p-6 border border-white/80 shadow-lg">
+                            <div class="card-frosted p-6">
                                 <h4 class="font-bold text-xl text-slate-800 mb-4"><i
                                         class="fa-solid fa-ranking-star text-sky-500 mr-2"></i>各縣市空維區核定數量</h4>
                                 <p class="text-sm text-slate-500 mb-4">展現各地方政府推動空維區的努力成果</p>
@@ -464,7 +463,7 @@
                             </div>
 
                             <!-- Donut Chart -->
-                            <div class="bg-white/80 backdrop-blur-md rounded-3xl p-6 border border-white/80 shadow-lg">
+                            <div class="card-frosted p-6">
                                 <h4 class="font-bold text-xl text-slate-800 mb-4"><i
                                         class="fa-solid fa-chart-pie text-sky-500 mr-2"></i>空維區保護類型分佈</h4>
                                 <p class="text-sm text-slate-500 mb-4">了解空維區都在保護哪些地方</p>
@@ -607,7 +606,7 @@
                         <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 mb-6">
                             <!-- 排放趨勢折線/長條圖 (主圖) -->
                             <div
-                                class="xl:col-span-8 bg-white/80 backdrop-blur-md rounded-3xl p-6 border border-white/80 shadow-lg">
+                                class="xl:col-span-8 card-frosted p-6">
                                 <div class="flex items-center justify-between mb-3">
                                     <div>
                                         <h4 class="font-bold text-xl text-slate-800"><i
@@ -639,7 +638,7 @@
 
                             <!-- 許可證審查動態 -->
                             <div
-                                class="xl:col-span-4 bg-white/80 backdrop-blur-md rounded-3xl p-6 border border-white/80 shadow-lg flex flex-col">
+                                class="xl:col-span-4 card-frosted p-6 flex flex-col">
                                 <div class="mb-3">
                                     <h4 class="font-bold text-xl text-slate-800"><i
                                             class="fa-solid fa-file-signature text-cyan-500 mr-2"></i>許可證審查動態</h4>
@@ -655,7 +654,7 @@
 
                             <!-- 縣市排放總量熱區分佈 Treemap (前10大縣市) -->
                             <div
-                                class="xl:col-span-7 bg-white/80 backdrop-blur-md rounded-3xl p-6 border border-white/80 shadow-lg">
+                                class="xl:col-span-7 card-frosted p-6">
                                 <div class="mb-3">
                                     <h4 class="font-bold text-xl text-slate-800"><i
                                             class="fa-solid fa-map-location-dot text-cyan-500 mr-2"></i>縣市排放總量熱區分佈</h4>
@@ -666,7 +665,7 @@
 
                             <!-- 年度排放量 -->
                             <div
-                                class="xl:col-span-5 bg-white/80 backdrop-blur-md rounded-3xl p-6 border border-white/80 shadow-lg">
+                                class="xl:col-span-5 card-frosted p-6">
                                 <div class="mb-4">
                                     <h4 class="font-bold text-xl text-slate-800"><i
                                             class="fa-solid fa-ranking-star text-cyan-500 mr-2"></i>年度排放量</h4>
@@ -786,7 +785,7 @@
                         <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
                             <!-- Module 1: Two-Stroke Scooter Phase-out -->
                             <div
-                                class="bg-white/80 backdrop-blur-md rounded-3xl p-4 border border-white/80 shadow-lg flex flex-col">
+                                class="card-frosted p-4 flex flex-col">
                                 <h4 class="font-bold text-xl text-slate-800 mb-1"><i
                                         class="fa-solid fa-motorcycle text-indigo-500 mr-2"></i>二行程機車淘汰數量統計</h4>
                                 <p class="text-sm text-slate-500 mb-3">展示淘汰高污染二行程機車的顯著成果</p>
@@ -794,7 +793,7 @@
                             </div>
 
                             <!-- Module 2: Fuel Scooter Structures -->
-                            <div class="bg-white/80 backdrop-blur-md rounded-3xl p-6 border border-white/80 shadow-lg">
+                            <div class="card-frosted p-6">
                                 <h4 class="font-bold text-xl text-slate-800 mb-2"><i
                                         class="fa-solid fa-leaf text-indigo-500 mr-2"></i>各期別燃油機車演進</h4>
                                 <p class="text-sm text-slate-500 mb-4">高污染機車減少，低污染機車成為主流</p>
@@ -802,7 +801,7 @@
                             </div>
 
                             <!-- Module 3: Diesel Vehicle Phases -->
-                            <div class="bg-white/80 backdrop-blur-md rounded-3xl p-6 border border-white/80 shadow-lg">
+                            <div class="card-frosted p-6">
                                 <div class="flex justify-between items-start mb-4">
                                     <div>
                                         <h4 class="font-bold text-xl text-slate-800"><i
@@ -820,7 +819,7 @@
                             </div>
 
                             <!-- Module 4: Subsidy Cases -->
-                            <div class="bg-white/80 backdrop-blur-md rounded-3xl p-6 border border-white/80 shadow-lg">
+                            <div class="card-frosted p-6">
                                 <div class="flex items-start justify-between mb-4">
                                     <div>
                                         <h4 class="font-bold text-xl text-slate-800"><i
@@ -964,7 +963,7 @@
                         <div class="grid grid-cols-1 xl:grid-cols-12 gap-8 mb-10">
                             <!-- Map Container (5 cols - narrower for Taiwan map) -->
                             <div
-                                class="xl:col-span-5 bg-white/80 backdrop-blur-md rounded-3xl p-6 border border-white/80 shadow-lg">
+                                class="xl:col-span-5 card-frosted p-6">
                                 <h4 class="font-bold text-xl text-slate-800 mb-2"><i
                                         class="fa-solid fa-map-location-dot text-purple-500 mr-2"></i>臺灣執法熱度圖</h4>
                                 <p class="text-sm text-slate-500 mb-4">各縣市噪音執法設備分布與績效視覺化</p>
@@ -1096,7 +1095,7 @@
 
                             <!-- Rankings Container (7 cols - wider for charts) -->
                             <div
-                                class="xl:col-span-7 bg-white/80 backdrop-blur-md rounded-3xl p-6 border border-white/80 shadow-lg">
+                                class="xl:col-span-7 card-frosted p-6">
                                 <h4 class="font-bold text-xl text-slate-800 mb-2"><i
                                         class="fa-solid fa-chart-bar text-purple-500 mr-2"></i>全國執法數量統計</h4>
                                 <p class="text-sm text-slate-500 mb-4">各縣市執法成果排名(僅顯示前8名)</p>
@@ -1115,7 +1114,7 @@
                         </div>
 
                         <!-- Section 3: 科技執法雙軌流程圖 -->
-                        <div class="bg-white/80 backdrop-blur-md rounded-3xl p-8 border border-white/80 shadow-lg">
+                        <div class="card-frosted p-8">
                             <div class="mb-6 text-center">
                                 <h4 class="font-bold text-2xl text-slate-800 mb-1"><i
                                         class="fa-solid fa-diagram-project text-purple-500 mr-2"></i>聲音照相科技執法流程</h4>
@@ -1368,7 +1367,7 @@
 
                             <!-- ③ Choropleth Map + Top5 (full width, moved up) -->
                             <div
-                                class="xl:col-span-2 bg-white/80 backdrop-blur-md rounded-3xl p-6 border border-white/80 shadow-lg">
+                                class="xl:col-span-2 card-frosted p-6">
                                 <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
                                     <div>
                                         <h4 class="font-bold text-xl text-slate-800"><i
@@ -1416,7 +1415,7 @@
                             </div>
 
                             <!-- ① Shore Power Map -->
-                            <div class="bg-white/80 backdrop-blur-md rounded-3xl p-6 border border-white/80 shadow-lg">
+                            <div class="card-frosted p-6">
                                 <h4 class="font-bold text-xl text-slate-800 mb-2"><i
                                         class="fa-solid fa-anchor text-teal-500 mr-2"></i>全臺岸電推動地圖</h4>
                                 <p class="text-sm text-slate-500 mb-4">九大港口岸電設施分布，點擊港口查看詳情</p>
@@ -1457,7 +1456,7 @@
                             </div>
 
                             <!-- ② Machinery Label Donut + Info Bars -->
-                            <div class="bg-white/80 backdrop-blur-md rounded-3xl p-6 border border-white/80 shadow-lg">
+                            <div class="card-frosted p-6">
                                 <h4 class="font-bold text-xl text-slate-800 mb-2"><i
                                         class="fa-solid fa-medal text-amber-500 mr-2"></i>施工機具清潔排放自主管理標章</h4>
                                 <p class="text-sm text-slate-500 mb-2">有效標章 8,103 部・金牌占 86.4%（115年2月底）</p>
@@ -1511,7 +1510,7 @@
                             </div>
 
                             <!-- ⑤ Stacked Bar -->
-                            <div class="bg-white/80 backdrop-blur-md rounded-3xl p-6 border border-white/80 shadow-lg">
+                            <div class="card-frosted p-6">
                                 <h4 class="font-bold text-xl text-slate-800 mb-2"><i
                                         class="fa-solid fa-seedling text-emerald-500 mr-2"></i>環保祭祀推動成效（111–114年）</h4>
                                 <p class="text-sm text-slate-500 mb-4">左軸：紙錢集中燒收運量（公噸），右軸：推動多元替代祭祀作法紙錢減少用量（公噸）</p>
@@ -1519,7 +1518,7 @@
                             </div>
 
                             <!-- ⑥ Catering Chart (redesigned) -->
-                            <div class="bg-white/80 backdrop-blur-md rounded-3xl p-6 border border-white/80 shadow-lg">
+                            <div class="card-frosted p-6">
                                 <h4 class="font-bold text-xl text-slate-800 mb-1"><i
                                         class="fa-solid fa-utensils text-sky-500 mr-2"></i>餐飲油煙防護網歷年趨勢（112–114年）</h4>
                                 <p class="text-sm text-slate-500 mb-3">分組柱狀圖：列管・巡查・符規家數；折線：登記家數趨勢（右軸，萬家）</p>
@@ -1672,7 +1671,7 @@
 
                             <!-- 左側：互動地圖 -->
                             <div
-                                class="xl:col-span-5 bg-white/80 backdrop-blur-md rounded-3xl p-5 border border-white/80 shadow-lg flex flex-col">
+                                class="xl:col-span-5 card-frosted p-5 flex flex-col">
                                 <div class="flex items-center justify-between mb-3">
                                     <div>
                                         <h4 class="font-bold text-xl text-slate-800"><i
@@ -1725,7 +1724,7 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <!-- 公告 vs 非公告 -->
                                     <div
-                                        class="bg-white/80 backdrop-blur-md rounded-3xl p-5 border border-white/80 shadow-lg">
+                                        class="card-frosted p-5">
                                         <h4 class="font-bold text-base text-slate-800 mb-1"><i
                                                 class="fa-solid fa-chart-pie text-violet-500 mr-1.5"></i>公告 vs 非公告</h4>
                                         <p class="text-xs text-slate-500 mb-2">場所性質分佈</p>
@@ -1733,7 +1732,7 @@
                                     </div>
                                     <!-- 優良 vs 良好 -->
                                     <div
-                                        class="bg-white/80 backdrop-blur-md rounded-3xl p-5 border border-white/80 shadow-lg">
+                                        class="card-frosted p-5">
                                         <h4 class="font-bold text-base text-slate-800 mb-1"><i
                                                 class="fa-solid fa-award text-amber-500 mr-1.5"></i>優良 vs 良好</h4>
                                         <p class="text-xs text-slate-500 mb-2">標章等級分佈</p>
@@ -1743,7 +1742,7 @@
 
                                 <!-- 圖表 3：前5大場所類別 -->
                                 <div
-                                    class="bg-white/80 backdrop-blur-md rounded-3xl p-5 border border-white/80 shadow-lg flex flex-col">
+                                    class="card-frosted p-5 flex flex-col">
                                     <h4 class="font-bold text-base text-slate-800 mb-1"><i
                                             class="fa-solid fa-ranking-star text-sky-500 mr-1.5"></i>前五大場所類別</h4>
                                     <p class="text-xs text-slate-500 mb-2">場所性質統計（數量最多之類別）</p>
@@ -1809,7 +1808,8 @@
     <button id="scroll-top" aria-label="返回頂端"><i class="fa-solid fa-arrow-up"></i></button>
 
     <!-- Chart.js & ECharts -->
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <!-- Self-hosted, version-pinned (was cdn.jsdelivr.net echarts@5 unpinned) -->
+    <script src="assets/vendor/echarts-5.6.0.min.js"></script>
     <!-- Custom Script -->
     <script src="mobile_data.js?v=2"></script>
     <script src="fugitive_data.js?v=2"></script>

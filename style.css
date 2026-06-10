@@ -1,4 +1,10 @@
 /* Custom CSS for moenv_redesign_儀表板_V2 */
+/* ── Design tokens ──
+   與 tailwind.config.js theme.extend 對應（改值請兩邊同步）：
+   --primary-color  = colors.moenv.DEFAULT   --glass-shadow = boxShadow.glass
+   --secondary-color= colors.moenv.green     --shadow-glow  = boxShadow.glow
+   --accent-color   = colors.moenv.amber     --radius-md/lg = borderRadius.card / card-lg
+   卡片變體：.glass-card（本檔，Hero 浮動卡）/ .card-frosted（tailwind.input.css，分頁資料卡） */
 :root {
     --primary-color: #009688;
     --secondary-color: #4CAF50;
@@ -67,10 +73,7 @@ body {
     backface-visibility: hidden; /* Prevent flickering */
 }
 
-@keyframes floatOrb {
-    0%, 100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-15px) scale(1.05); }
-}
+/* floatOrb keyframes 已移至 tailwind.config.js（animate-float-orb*） */
 
 @keyframes dash {
     to { stroke-dashoffset: 0; }
@@ -157,6 +160,8 @@ body {
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.5s ease, transform 0.5s ease;
+    /* Anchored scrolls (tab switch, in-page links) land below the fixed header */
+    scroll-margin-top: 96px;
 }
 
 .tab-content.active {
@@ -531,6 +536,36 @@ body {
    Responsive
    ========================================== */
 @media (max-width: 768px) {
+
+    /* Header: shrink logo block & let the long site title truncate with an
+       ellipsis instead of overflowing past the right edge (375px viewports) */
+    .logo {
+        gap: 8px;
+        min-width: 0;
+        flex: 1 1 auto;
+    }
+
+    .logo img {
+        height: 40px;
+    }
+
+    .logo-text {
+        display: none; /* redundant on small screens: the logo mark already reads 環境部 */
+    }
+
+    .site-title {
+        min-width: 0;
+    }
+
+    .site-title h1 {
+        font-size: 0.95rem;
+        margin-left: 8px;
+        padding-left: 10px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
     #main-nav ul {
         display: none;
         position: absolute;

@@ -1,5 +1,7 @@
 // ── Shared Taiwan GeoJSON (fetches once, reused by all map dashboards) ──────
-const _GEO_JSON_URL = 'https://raw.githubusercontent.com/g0v/twgeojson/master/json/twCounty2010.geo.json';
+// Self-hosted (simplified via mapshaper, 9.1MB→389KB); remote kept only as fallback.
+const _GEO_JSON_URL = './assets/data/twCounty2010.geo.json';
+const _GEO_JSON_FALLBACK_URL = 'https://raw.githubusercontent.com/g0v/twgeojson/master/json/twCounty2010.geo.json';
 const _GEO_NAME_NORMALIZE = {
     '台東縣': '臺東縣', '台北市': '臺北市', '台中市': '臺中市',
     '台南市': '臺南市', '桃園縣': '桃園市'
@@ -7,7 +9,8 @@ const _GEO_NAME_NORMALIZE = {
 const _GEO_OFFSHORE = new Set(['金門縣', '澎湖縣', '連江縣']);
 
 const _geoJsonPromise = fetch(_GEO_JSON_URL)
-    .then(r => r.json())
+    .then(r => { if (!r.ok) throw new Error('local GeoJSON missing (' + r.status + ')'); return r.json(); })
+    .catch(() => fetch(_GEO_JSON_FALLBACK_URL).then(r => r.json()))
     .then(geoJson => {
         geoJson.features.forEach(f => {
             const n = f.properties.name || f.properties.COUNTYNAME;
@@ -237,17 +240,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // 4. Header Scroll & Scroll Top
     // ==========================================
     const header = document.getElementById('header');
+    const _scrollTopBtn = document.getElementById('scroll-top'); // cached: avoid per-scroll DOM query
+    let _scrollTicking = false;
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
-        }
-        const scrollTopBtn = document.getElementById('scroll-top');
-        if (scrollTopBtn) {
-            scrollTopBtn.classList.toggle('show', window.scrollY > 300);
-        }
-    });
+        if (_scrollTicking) return; // rAF throttle: coalesce scroll events to one update per frame
+        _scrollTicking = true;
+        requestAnimationFrame(() => {
+            header.classList.toggle('scrolled', window.scrollY > 50);
+            if (_scrollTopBtn) _scrollTopBtn.classList.toggle('show', window.scrollY > 300);
+            _scrollTicking = false;
+        });
+    }, { passive: true });
 
     const scrollTopBtn = document.getElementById('scroll-top');
     if (scrollTopBtn) {
@@ -276,13 +279,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 b.classList.remove('active', 'text-white', 'shadow-md', 'transform', '-translate-y-1');
                 b.classList.add('bg-white/80', 'text-slate-500', 'hover:bg-slate-50', 'hover:text-brand');
                 b.style.backgroundColor = '';
-                if (b.hasAttribute('role')) b.setAttribute('aria-selected', 'false');
+                if (b.hasAttribute('role')) {
+                    b.setAttribute('aria-selected', 'false');
+                    b.setAttribute('tabindex', '-1'); // roving tabindex: only active tab in tab order
+                }
             });
             tabContents.forEach(c => c.classList.remove('active'));
 
             btn.classList.add('active', 'text-white', 'shadow-md', 'transform', '-translate-y-1');
             btn.classList.remove('bg-white/80', 'text-slate-500', 'hover:bg-slate-50', 'hover:text-brand');
-            if (btn.hasAttribute('role')) btn.setAttribute('aria-selected', 'true');
+            if (btn.hasAttribute('role')) {
+                btn.setAttribute('aria-selected', 'true');
+                btn.setAttribute('tabindex', '0');
+            }
 
             const targetId = btn.getAttribute('data-tab');
             const _tabEl = document.getElementById(targetId);
@@ -332,6 +341,26 @@ document.addEventListener('DOMContentLoaded', () => {
             if (targetId === 'promo-source' && !promoDashboardInitialized) {
                 promoDashboardInitialized = true;
                 requestAnimationFrame(() => { initPromoDashboard(); });
+            }
+        });
+    });
+
+    // Keyboard navigation for tabs (WAI-ARIA Tabs pattern: Arrow/Home/End)
+    const _tabArr = Array.from(tabBtns);
+    _tabArr.forEach((btn, i) => {
+        if (btn.hasAttribute('role') && btn.getAttribute('aria-selected') !== 'true') {
+            btn.setAttribute('tabindex', '-1');
+        }
+        btn.addEventListener('keydown', (e) => {
+            let target = null;
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') target = _tabArr[(i + 1) % _tabArr.length];
+            else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') target = _tabArr[(i - 1 + _tabArr.length) % _tabArr.length];
+            else if (e.key === 'Home') target = _tabArr[0];
+            else if (e.key === 'End') target = _tabArr[_tabArr.length - 1];
+            if (target) {
+                e.preventDefault();
+                target.focus();
+                target.click();
             }
         });
     });
@@ -1353,31 +1382,49 @@ function initNoiseDashboard() {
                 const donutInst = donutDom && donutDom._echartsInst;
                 if (donutInst) donutInst.resize();
             });
+            // Cache tooltip field elements once (was 5 getElementById calls per hover)
+            const tt = {
+                county: document.getElementById('noise-tt-county'),
+                fixed:  document.getElementById('noise-tt-fixed'),
+                mobile: document.getElementById('noise-tt-mobile'),
+                fine:   document.getElementById('noise-tt-fine'),
+                notify: document.getElementById('noise-tt-notify'),
+            };
+            const showCounty = (g, city) => {
+                g.setAttribute('stroke', '#333');
+                g.setAttribute('stroke-width', '2');
+                g.style.filter = 'brightness(1.2)';
+                tt.county.textContent = city.county;
+                tt.fixed.textContent  = city.fixed + ' 套';
+                tt.mobile.textContent = city.mobile + ' 套';
+                tt.fine.textContent   = city.direct_fine.toLocaleString() + ' 件';
+                tt.notify.textContent = city.notify_inspect.toLocaleString() + ' 件';
+                tooltip.style.display = 'block';
+            };
+            const hideCounty = (g, city) => {
+                const ratio = city[noiseRankingType] / maxVals[noiseRankingType];
+                g.setAttribute('fill', _noiseMapFillColor(noiseRankingType, ratio));
+                g.setAttribute('stroke', '#999');
+                g.setAttribute('stroke-width', '0.75');
+                g.style.filter = '';
+                tooltip.style.display = 'none';
+            };
             svg.querySelectorAll('[data-county-id]').forEach(g => {
                 const id = g.getAttribute('data-county-id');
                 const city = noiseRawData.find(c => c.id === id);
                 if (!city) return;
 
-                g.addEventListener('mouseenter', () => {
-                    g.setAttribute('stroke', '#333');
-                    g.setAttribute('stroke-width', '2');
-                    g.style.filter = 'brightness(1.2)';
+                // A11y: each county is keyboard-focusable and announces its stats
+                g.setAttribute('tabindex', '0');
+                g.setAttribute('role', 'img');
+                g.setAttribute('aria-label',
+                    `${city.county}：固定式設備 ${city.fixed} 套、移動式設備 ${city.mobile} 套、` +
+                    `直接開罰 ${city.direct_fine.toLocaleString()} 件、通知到檢 ${city.notify_inspect.toLocaleString()} 件`);
 
-                    document.getElementById('noise-tt-county').textContent = city.county;
-                    document.getElementById('noise-tt-fixed').textContent = city.fixed + ' 套';
-                    document.getElementById('noise-tt-mobile').textContent = city.mobile + ' 套';
-                    document.getElementById('noise-tt-fine').textContent = city.direct_fine.toLocaleString() + ' 件';
-                    document.getElementById('noise-tt-notify').textContent = city.notify_inspect.toLocaleString() + ' 件';
-                    tooltip.style.display = 'block';
-                });
-                g.addEventListener('mouseleave', () => {
-                    const ratio = city[noiseRankingType] / maxVals[noiseRankingType];
-                    g.setAttribute('fill', _noiseMapFillColor(noiseRankingType, ratio));
-                    g.setAttribute('stroke', '#999');
-                    g.setAttribute('stroke-width', '0.75');
-                    g.style.filter = '';
-                    tooltip.style.display = 'none';
-                });
+                g.addEventListener('mouseenter', () => showCounty(g, city));
+                g.addEventListener('mouseleave', () => hideCounty(g, city));
+                g.addEventListener('focus', () => showCounty(g, city));
+                g.addEventListener('blur', () => hideCounty(g, city));
             });
         }
     }
