@@ -314,7 +314,16 @@
                     class="tab-btn w-full py-4 rounded-2xl font-bold text-base flex flex-col items-center justify-center gap-1.5 transition-all border border-white/40 backdrop-blur-sm bg-white/80 text-slate-500 hover:bg-slate-50 hover:text-brand"
                     data-tab="noise-source" data-theme="theme-noise"
                     role="tab" id="tab-noise-source" aria-controls="noise-source" aria-selected="false">
-                    <i class="fa-solid fa-volume-low text-2xl mb-0.5 opacity-80" aria-hidden="true"></i>
+                    <!-- 低音量喇叭：深色＝實際音量（內圈），淺色＝總音量（外兩圈），fill/stroke 用 currentColor 隨按鈕狀態變色 -->
+                    <svg class="mb-0.5 opacity-80" width="30" height="24" viewBox="0 0 32 24" fill="none"
+                        xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M3 8.5h4.2L14 2.5v19l-6.8-6H3a1 1 0 0 1-1-1v-5a1 1 0 0 1 1-1z" fill="currentColor" />
+                        <path d="M17.5 9a5 5 0 0 1 0 6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" />
+                        <path d="M21 6a 9.5 9.5 0 0 1 0 12" stroke="currentColor" stroke-width="2.4"
+                            stroke-linecap="round" opacity="0.3" />
+                        <path d="M24.5 3a 14 14 0 0 1 0 18" stroke="currentColor" stroke-width="2.4"
+                            stroke-linecap="round" opacity="0.3" />
+                    </svg>
                     <span>寧適環境管理</span>
                 </button>
                 <button
@@ -862,7 +871,7 @@
                                 <div
                                     class="px-4 py-2 bg-purple-50 border border-purple-200 rounded-lg text-sm text-purple-700 font-bold flex items-center gap-2">
                                     <span class="w-2 h-2 rounded-full bg-purple-500 animate-pulse inline-block"></span>
-                                    數據基準：115年1月底
+                                    數據基準：110年→115年1月底
                                 </div>
                             </div>
                         </div>
@@ -884,11 +893,11 @@
                                         <div class="text-cyan-100 font-bold text-sm">累計設備總數</div>
                                     </div>
                                     <div class="text-5xl font-number font-black drop-shadow-md">
-                                        <span id="kpi-total-eq" class="counter" data-target="338">0</span>
+                                        <span id="kpi-total-eq" class="counter" data-target="343">0</span>
                                         <span class="text-xl font-sans ml-2 opacity-80 font-medium">套</span>
                                     </div>
                                     <div class="text-xs text-cyan-100 mt-2 opacity-80">固定 <span
-                                            class="font-bold">168</span> / 移動 <span class="font-bold">170</span></div>
+                                            class="font-bold">168</span> / 移動 <span class="font-bold">175</span></div>
                                 </div>
                             </div>
 
@@ -915,7 +924,7 @@
                                             </div>
                                             <div class="flex items-center gap-1.5"><span
                                                     class="w-2.5 h-2.5 rounded-full bg-fuchsia-300 inline-block"></span>移動式
-                                                <span class="font-bold text-white">170</span> 套
+                                                <span class="font-bold text-white">175</span> 套
                                             </div>
                                             <div class="text-violet-200 pt-1 border-t border-white/20">覆蓋全國 22 縣市</div>
                                         </div>
@@ -938,7 +947,7 @@
                                         <div class="text-red-100 font-bold text-sm">直接開罰總件數</div>
                                     </div>
                                     <div class="text-5xl font-number font-black drop-shadow-md">
-                                        <span id="kpi-direct-fine" class="counter" data-target="23132">0</span>
+                                        <span id="kpi-direct-fine" class="counter" data-target="23127">0</span>
                                         <span class="text-xl font-sans ml-2 opacity-80 font-medium">件</span>
                                     </div>
                                     <div class="text-xs text-red-100 mt-2 opacity-80">依噪音管制法第26條告發</div>

@@ -1306,13 +1306,13 @@ const noiseRawData = [
     { id: 'P', county: "雲林縣",  fixed: 0,   mobile: 2,   direct_fine: 56,    notify_inspect: 240   },
     { id: 'I', county: "嘉義市",  fixed: 5,   mobile: 3,   direct_fine: 203,   notify_inspect: 100   },
     { id: 'Q', county: "嘉義縣",  fixed: 2,   mobile: 4,   direct_fine: 31,    notify_inspect: 229   },
-    { id: 'T', county: "屏東縣",  fixed: 2,   mobile: 3,   direct_fine: 5,     notify_inspect: 61    },
+    { id: 'T', county: "屏東縣",  fixed: 2,   mobile: 5,   direct_fine: 3,     notify_inspect: 61    },
     { id: 'G', county: "宜蘭縣",  fixed: 1,   mobile: 4,   direct_fine: 153,   notify_inspect: 11    },
     { id: 'U', county: "花蓮縣",  fixed: 5,   mobile: 3,   direct_fine: 126,   notify_inspect: 116   },
     { id: 'V', county: "臺東縣",  fixed: 5,   mobile: 0,   direct_fine: 0,     notify_inspect: 524   },
-    { id: 'X', county: "澎湖縣",  fixed: 0,   mobile: 1,   direct_fine: 3,     notify_inspect: 0     },
+    { id: 'X', county: "澎湖縣",  fixed: 0,   mobile: 3,   direct_fine: 1,     notify_inspect: 0     },
     { id: 'W', county: "金門縣",  fixed: 2,   mobile: 3,   direct_fine: 3,     notify_inspect: 87    },
-    { id: 'Z', county: "連江縣",  fixed: 0,   mobile: 0,   direct_fine: 1,     notify_inspect: 0     },
+    { id: 'Z', county: "連江縣",  fixed: 0,   mobile: 1,   direct_fine: 0,     notify_inspect: 0     },
 ].map(d => ({ ...d, total_equipment: d.fixed + d.mobile }));
 
 let noiseRankingType = 'direct_fine';
@@ -1339,7 +1339,7 @@ function initNoiseDashboard() {
                 center: ['50%', '50%'],
                 data: [
                     { value: 168, name: '固定式', itemStyle: { color: '#67e8f9' } },
-                    { value: 170, name: '移動式', itemStyle: { color: '#e879f9' } }
+                    { value: 175, name: '移動式', itemStyle: { color: '#e879f9' } }
                 ],
                 label: { show: false },
                 emphasis: { scale: false }
