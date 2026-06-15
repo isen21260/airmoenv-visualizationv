@@ -2752,7 +2752,7 @@ function promoRenderCategoryChart(cityKey) {
     });
 }
 
-// 台灣熱力地圖
+// 台灣標章分佈地圖
 function promoRenderMap() {
     const el = document.getElementById('chart-iaq-map');
     if (!el) return;
