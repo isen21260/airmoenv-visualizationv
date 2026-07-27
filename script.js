@@ -1287,9 +1287,12 @@ document.addEventListener('DOMContentLoaded', () => {
 // ==========================================
 // 資料來源：統計至115年1月底。下列各縣市明細為已修正版本（桃園市、臺中市、臺南市等
 // 縣市原始資料中 mobile 與 direct_fine 欄位曾對調，已還原正確值）。
-// 全國加總（由本表計算，亦為頁面 KPI 顯示值）：
-//   固定式 168 套、移動式 170 套（合計 338 套）、直接開罰 23,132 件、通知到檢 22,661 件。
-// ⚠ 若日後調整下表數值，請同步更新 index.html 的 KPI（kpi-total-eq / kpi-direct-fine 等）。
+// 全國加總（由本表 22 縣市計算，亦為頁面 KPI 顯示值）：
+//   固定式 168 套、移動式 175 套（合計 343 套）、直接開罰 23,127 件、通知到檢 22,661 件。
+// ⚠ 若日後調整下表數值，請同步更新 index.html 的下列硬編碼數字：
+//   ・KPI 卡：kpi-total-eq(343)／固定 168 ・移動 175／kpi-direct-fine(23,127)／kpi-notify(22,661)
+//   ・KPI 2 甜甜圈圖例：固定式 168、移動式 175（本檔 initNoiseDashboard() 內亦寫死一份）
+//   ・科技執法流程圖結案框：直接開罰 23,127 件、通知到檢 22,661 件
 const noiseRawData = [
     { id: 'A', county: "臺北市",  fixed: 20,  mobile: 14,  direct_fine: 6540,  notify_inspect: 8308  },
     { id: 'F', county: "新北市",  fixed: 35,  mobile: 11,  direct_fine: 5808,  notify_inspect: 4362  },
@@ -2120,6 +2123,11 @@ function fug2RenderCatering(data) {
 // ============================================================
 
 // -- CEMS mock data (not in JSON) ----------------------------
+// ⚠ 假資料，非真實統計。本頁籤其餘數字（排放量、減排幅度、納管家數、縣市熱區、
+//   前 8 大排放工廠）皆由 analyze_emissions.js 讀真實 CSV 彙整寫入 dashboard_data.json，
+//   唯獨「CEMS 家數」與下方「許可證審查動態」兩塊是推估值。
+//   下表 2009→2025 為每年 +1 家的線性假設（85→101），沒有任何來源依據。
+//   ⇒ 取得真實 CEMS 家數後請直接覆寫本表，或改由 dashboard_data.json 供應。
 const FIXED_CEMS_MOCK = {
     2009:85, 2010:86, 2011:87, 2012:88, 2013:89, 2014:90,
     2015:91, 2016:92, 2017:93, 2018:94, 2019:95, 2020:96,
@@ -2127,7 +2135,10 @@ const FIXED_CEMS_MOCK = {
 };
 
 // -- Permit mock data (not in JSON) --------------------------
-// 2024 real data: setup=369, change=43, operation=1308
+// ⚠ 僅 2024（民國113年）setup=369 / change=43 / operation=1308 是真值；
+//   其餘 2009–2023、2025 全部為由該真值往前後線性推估的假資料，不可對外引用。
+//   對應畫面：固定源頁籤右上「許可證審查動態」甜甜圈（設置／變更／操作許可件數）。
+//   ⇒ 補齊各年度真實件數後請直接覆寫本表。
 const FIXED_PERMIT_MOCK = {
     2009:{setup:150,change:30,operation:400},
     2010:{setup:160,change:32,operation:420},
